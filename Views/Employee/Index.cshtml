@@ -1,0 +1,475 @@
+﻿@model HrmsWeb.Models.EmployeeModel
+
+@{ ViewBag.Title = "Index"; }
+
+<h2>Employee List</h2>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="clearTextBox();">
+    New Employee
+</button>
+<br />
+
+<div>
+    <table id="EmpTable" class="table table-bordered table-hover;" >
+        <thead>
+            <tr>
+                <th>EmployeeId</th>
+                <th>EmployeeName</th>
+                <th>Department</th>
+                <th>DOB</th>
+                <th>DOJ</th>
+                <th>DOL</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody class="tbody" style="height: 80px; overflow-y: auto;">
+            <!-- Employee records will be populated here -->
+        </tbody>
+    </table>
+</div>
+@*---------ADD/EDIT MODAL FORM --------------*@
+
+<div class="modal fade" id="myModal"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="myModalLabel">Employee</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="EmployeeId">ID</label>
+                        <input type="text" class="form-control" id="EmployeeId" placeholder="Employee Id" disabled="disabled" />
+                    </div>
+                    <div class="form-group">
+                        <label for="EmployeeName">Employee Name</label>
+                        <input type="text" class="form-control" id="EmployeeName" placeholder="Employee Name" required maxlength="100" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DepartmentId">Department Id</label>
+                        @Html.DropDownListFor(m => m.DepartmentId, new SelectList(ViewBag.departments, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label for="DOB">Date Of Birth</label>
+                        <input type="date" class="form-control" id="DOB" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DOJ">Date Of Joining</label>
+                        <input type="date" class="form-control" id="DOJ" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DOL">Date Of Leaving</label>
+                        <input type="date" class="form-control" id="DOL" />
+                    </div>
+
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                @*data-dismiss="modal*@
+                <button type="button" class="btn btn-primary" id="btnAdd"  OnClick="btnAdd_Click;">Save</button>
+                @*<button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" data-dismiss="modal" onclick="Update(); ">Update</button>*@
+                <button type="submit"  class="btn btn-primary" form="myModal" id="btnUpdate" style="display:none;" OnClick="btnUpdate_Click" >Update</button>
+
+                <button type="button" id="btnCancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            loadData();
+
+        });
+
+        function loadData() {
+
+            $.ajax({
+                url: "/Employee/List",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    $('#EmpTable').DataTable({
+                        "bDestroy": true,
+                        data: data,
+                        columns: [
+
+                            { data: "EmployeeId" },
+                            { data: "EmployeeName" },
+                            { data: "DepartmentName" },
+                            {
+                                data: "DOB",
+                                render: function (data) {
+                                    var dat1 = moment(data).format("DD-MM-YYYY");
+                                    if (dat1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+
+                            {
+                                data: "DOJ",
+                                render: function (data) {
+                                    var dat1 = moment(data).format("DD-MM-YYYY");
+                                    if (dat1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            {
+                                data: "DOL",
+                                render: function (data) {
+                                    var dat1 = moment(data).format("DD-MM-YYYY");
+
+                                    /* return moment(data).format("DD-MM-YYYY");*/
+                                    if (dat1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            {
+                                data: null,
+                                render: function (data) {
+                                    {
+                                        return '<a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#myModal" onclick=Edit(' + data.EmployeeId + ')/a>  <a href="#"  class="glyphicon glyphicon-trash" style="color: red;padding-left:15px " onclick=Delete(' + data.EmployeeId + ') /a > ';
+
+                                        //return '<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick=Edit(' + data.EmployeeId + ')>Edit</a> | <a href="#"  class="btn btn-danger" onclick=Delete(' + data.EmployeeId + ') > Delete</a > ';
+                                    }
+                                }
+
+                            }],
+
+                        "initComplete": function (settings, json) {
+                            // Validate first page
+                            if (json.recordsTotal > 0) {
+
+                                $("#EmpTable").DataTable().page(0).draw(false);
+
+                            }
+
+                            // Modify pagination buttons
+                            $('.paginate_button').on('click', function () {
+                                if ($(this).hasClass('disabled')) {
+                                    return false;
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+
+
+        }
+
+
+        // Add Data Function
+        function Add() {
+            var empObj = {
+                EmployeeId: $('#EmployeeId').val(),
+                EmployeeName: $('#EmployeeName').val(),
+                DepartmentId: $('#DepartmentId').val(),
+                DOB: $('#DOB').val(),
+                DOJ: $('#DOJ').val(),
+                DOL: $('#DOL').val()
+
+            };
+
+
+            $.ajax({
+                url: "/Employee/Add",
+                data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    loadData();
+                    $('#myModal').modal('hide');
+                    $('#EmployeeId').val("");
+                    $('#EmployeeName').val("");
+                    $('#DepartmentId').val("");
+                    $('#DOB').val("");
+                    $('#DOJ').val("");
+                    $('#DOL').val("");
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+
+
+        // Function for getting the Data Based upon Employee ID
+        function Edit(EmpID) {
+
+            $('#EmployeeName').css('border-color', 'lightgrey');
+            $('#DepartmentId').css('border-color', 'lightgrey');
+            $('#DOB').css('border-color', 'lightgrey');
+            $('#DOJ').css('border-color', 'lightgrey');
+            $('#DOL').css('border-color', 'lightgrey');
+
+            $.ajax({
+                url: "/Employee/getbyID/" + EmpID,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+
+                success: function (result) {
+                    $('#EmployeeId').val(result.EmployeeId);
+                    $('#EmployeeName').val(result.EmployeeName);
+                    $('#DepartmentId').val(result.DepartmentId);
+                    var datam = moment(result.DOB);
+                    var DOB = datam.format("YYYY-MM-DD");
+                    if (DOB == '0001-01-01') {
+                        $('#DOB').val(null);
+                    } else {
+                        $('#DOB').val(DOB);
+                    }
+                    var datam = moment(result.DOJ);
+                    var DOJ = datam.format("YYYY-MM-DD");
+                    if (DOJ == '0001-01-01') {
+                        $('#DOJ').val(null);
+                    } else {
+                        $('#DOJ').val(DOJ);
+                    }
+                    var datam = moment(result.DOL);
+                    var DOL = datam.format("YYYY-MM-DD");
+
+                    if (DOL == '0001-01-01') {
+                        $('#DOL').val(null);
+                    } else {
+                        $('#DOL').val(DOL);
+                    }
+
+                    $('#btnUpdate').show();
+                    $('#btnAdd').hide();
+
+
+                },
+
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+
+            });
+            return false;
+        }
+
+      
+
+        $('#btnAdd').click(function (e) {
+
+            allok = 0
+            msg = ''
+
+            var empname = $('#EmployeeName').val();
+            var doj1 = $('#DOJ').val();
+            var dol1 = $('#DOL').val();
+      
+            if (empname.length == 0) {
+                allok = allok + 1
+                msg = 'Employee Name : Cannot be empty.'
+            }
+
+            if ((doj1 == null || doj1 == '') && (dol1 != null && dol1 != '')) {
+                allok = allok + 1
+                alert('Cannot enter Date of Leaving, if Date of Joining is blank.');
+                msg = msg + ',' + 'Date of Leaving : Cannot enter Date of Leaving, if Date of Joining is blank.'
+            }
+
+            if (dol1 != null && dol1 != '') {
+                if (doj1 != null && doj1 != '') {
+                    var datam = moment($('#DOJ').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#DOL').val());
+                    var dt2 = datam
+
+                    if ((dol1 < doj1) == true) {
+                        allok = allok + 1
+                        msg = msg + ',' + 'Start/End Dates Invalid';
+
+
+                    }
+
+                }
+            }
+
+
+
+
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+                //Update date into Database
+                Add()
+                $("#btnCancel").trigger("click");
+
+
+            }
+
+
+        });
+
+
+        $('#btnUpdate').click(function (e) {
+          
+            allok = 0
+            msg = ''
+
+            var empname = $('#EmployeeName').val();
+            var doj1 = $('#DOJ').val();
+            var dol1 =$('#DOL').val( );
+           
+            if (empname.length == 0) {
+                allok = allok + 1
+                msg = 'Employee Name : Cannot be empty.'
+            }
+           
+            if ( (doj1 == null || doj1 == '')  && (dol1 != null && dol1 !='') ) {
+              allok = allok + 1
+              alert('Cannot enter Date of Leaving, if Date of Joining is blank.');
+                msg = msg + ',' + 'Date of Leaving : Cannot enter Date of Leaving, if Date of Joining is blank.'
+            }
+
+            if (dol1 != null && dol1 != '') {
+                if (doj1 != null && doj1 != '') {
+                    var datam = moment($('#DOJ').val());
+                    var dt1 = datam
+                 
+                    var datam = moment($('#DOL').val());
+                    var dt2 = datam
+
+                    if ((dol1 < doj1) == true) {
+                        allok = allok + 1
+                        msg = msg + ',' + 'Start/End Dates Invalid';
+                      
+                   
+                    }
+                  
+                }
+            }
+          
+            
+
+            
+        
+            if (allok > 0 ) {
+                alert(msg)
+                e.preventDefault();
+             }
+            if (allok == 0)
+            {
+                //Update date into Database
+                Update()
+                $("#btnCancel").trigger("click");
+               
+                
+            }
+
+
+        });
+
+        // Function for updating employee's record
+        function Update() {
+          
+            var empObj = {
+                EmployeeId: $('#EmployeeId').val(),
+                EmployeeName: $('#EmployeeName').val(),
+                DepartmentId: $('#DepartmentId').val(),
+                DOB: $('#DOB').val(),
+                DOJ: $('#DOJ').val(),
+                DOL: $('#DOL').val()
+            };
+            $.ajax({
+                url: "/Employee/Update",
+                data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                  
+
+                    loadData();
+
+                    $('#EmployeeId').val("");
+                    $('#EmployeeName').val("");
+                    $('#DepartmentId').val("");
+                    $('#DOB').val("");
+                    $('#DOJ').val("");
+                    $('#DOL').val("");
+                },
+               
+
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+      
+
+        // Function for deleting employee's record
+        function Delete(ID) {
+
+            var ans = confirm("Are you sure you want to delete this Record?");
+            if (ans) {
+                $.ajax({
+                    url: "/Employee/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData();
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+        // Function for clearing the textboxes
+        function clearTextBox() {
+            $('#EmployeeId').val("");
+            $('#EmployeeName').val("");
+            $('#DepartmentId').val("");
+            $('#DOB').val("");
+            $('#DOJ').val("");
+            $('#DOL').val("");
+
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+            $('#EmployeeName').css('border-color', 'lightgrey');
+            $('#DepartmentId').css('border-color', 'lightgrey');
+            $('#DOB').css('border-color', 'lightgrey');
+            $('#DOJ').css('border-color', 'lightgrey');
+            $('#DOL').css('border-color', 'lightgrey');
+        }
+
+
+    </script>
+}

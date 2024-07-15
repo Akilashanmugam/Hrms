@@ -1,0 +1,1075 @@
+﻿@model  HrmsWeb.Models.CompanyModel
+
+
+@{
+    ViewBag.Title = "Index";
+}
+`
+<h2>Company </h2>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="ClearTextBox();">
+    Add New Company
+</button>
+<br />
+<br />
+<div style="width: fit-content; height:fit-content">
+    <table class="table table-bordered table-hover" id="CompanyTable">
+        <thead class="bg-primary">
+            <tr>
+                <th>ID</th>
+                <th>Company Name</th>
+                <th>Company Short Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Last Updated By</th>
+                <th>Last Updated Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody class="tbody"  style="width:1px; white-space:nowrap;">
+            <!-- Company records will be populated here -->
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" data-backdrop="static" data-keyboard="false" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-primary">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="myModalLabel">Add Company</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="CompanyId">Company ID</label>
+                        <input type="text" class="form-control" id="CompanyId" placeholder="CompanyId" disabled="disabled" />
+                    </div>
+                    <div class="form-group">
+                        <label for="CompanyName">Company Name</label>
+                        <input type="text" class="form-control" id="CompanyName" placeholder="CompanyName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="CompanyShortName">Company Short Name</label>
+                        <input type="text" class="form-control" id="CompanyShortName" placeholder="Company Short Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="StartDate">StartDate</label>
+                        <input type="date" class="form-control" id="StartDate" placeholder="StartDate" />
+                    </div>
+                    <div class="form-group">
+                        <label for="EndDate">EndDate</label>
+                        <input type="date" class="form-control" id="EndDate" placeholder="EndDate" />
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAdd" onclick="btnAdd_Click;">Save</button>
+                <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" data-dismiss="modal" onclick="btnUpdate_Click;">Update</button>
+                <button type="button" id="btnCancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*...........................company contact...............................................................*@
+
+<div class="modal" data-backdrop="static" data-keyboard="false" id="CompanyContactModal" tabindex="-1" role="dialog" aria-labelledby="CompanyContactLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:1050px;">
+        <div class="modal-content">
+            <div class="modal-header btn-primary">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="CompanyContactLabel">Company Contact</h4>
+            </div>
+            <div class="modal-body" style="overflow-x: scroll; overflow-y: scroll;">
+                <form>
+
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddCompanyContactModal" onclick="ClearContactTextBox();">
+                       New Contact
+                    </button>
+                    <input type="hidden" id="txtCompanyId" />
+                    <input type="hidden" id="txtContactId" />
+                    <br />
+                    <br />
+                    <div style="width: fit-content; height: fit-content;">
+                        <table class="table table-bordered table-hover " id="ContactTable">
+                            <thead class="bg-primary">
+                                <tr>
+                                    <th>CompanyID</th>
+                                    <th>ContactID</th>
+                                    <th>Contact Name</th>
+                                    <th>MobileNo</th>
+                                    <th>phoneNo</th>
+                                    <th>EmailId</th>
+                                    <th>Department</th>
+                                    <th>Designation</th>
+                                    <th>ContactStartDate</th>
+                                    <th>ContactEndDate</th>
+                                    <th>LastUpdatedBy</th>
+                                    <th>LastUpdatedDate</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbody" id="TBodyContact" style="width:1px; white-space:nowrap;">
+                                <!-- Company records will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal" data-backdrop="static" data-keyboard="false" id="AddCompanyContactModal" tabindex="-1" role="dialog" aria-labelledby="AddCompanyContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-primary">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="AddCompanyContactModalLabel">Add CompanyContact</h4>
+            </div>
+            <div class="modal-body row">
+                <form>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="CompanyId">CompanyID</label>
+                            <input type="number" class="form-control" id="CompanyId" placeholder="CompanyId" disabled="disabled" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ContactId">ContactID</label>
+                            <input type="number" class="form-control" id="ContactId" placeholder="ContactId" disabled="disabled" />
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="ContactName">ContactName</label>
+                            <input type="text" class="form-control" id="ContactName" placeholder="ContactName" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="EmailId">EmailId</label>
+                            <input type="text" class="form-control" id="EmailId" placeholder="EmailId" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="MobileNo">MobileNo</label>
+                            <input type="text" class="form-control" id="MobileNo" placeholder="MobileNo" />
+                        </div>
+                        <div class="form-group">
+                            <label for="PhoneNo">PhoneNo</label>
+                            <input type="text" class="form-control" id="PhoneNo" placeholder="PhoneNo" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="Department">Department</label>
+                            <input type="text" class="form-control" id="Department" placeholder="Department" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Designation">Designation</label>
+                            <input type="text" class="form-control" id="Designation" placeholder="Designation" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="ContactStartDate">ContactStartDate</label>
+                            <input type="date" class="form-control" id="ContactStartDate" placeholder="ContactStartDate" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ContactEndDate">ContactEndDate</label>
+                            <input type="date" class="form-control" id="ContactEndDate" placeholder="ContactEndDate" />
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnContactAdd"  onclick="btnContactAdd_Click;">Save</button>
+                <button type="button" class="btn btn-primary" id="btnContactUpdate" style="display:none;"  onclick="btnContactUpdate_Click;">Update</button>
+                <button type="button" class="btn btn-danger" id="btnContactCancel" data-dismiss="modal" >Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            loadData();
+        });
+        function loadData() {
+
+            $.ajax({
+                url: "/Company/List/",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    $('#CompanyTable').DataTable({
+                        "bDestroy": true,
+                        data: data,
+                        columns: [
+                            { data: "CompanyId" },
+                            { data: "CompanyName" },
+                            { data: "CompanyShortName" },
+                            {
+                                data: "StartDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            {
+                                data: "EndDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY")
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            { data: "LastUpdatedByName" },
+                            {
+                                data: "LastUpdatedDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            {
+                                data: null,
+                                render: function (data) {
+                                    {
+
+                                        var h1 = '<a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#myModal" onclick=Edit(' + data.CompanyId + ')/a> '
+                                        var h2 = '<a href = "#" class="glyphicon glyphicon-trash" style = "color: red;padding-left:15px " onclick = Delete(' + data.CompanyId + ')/a> '
+                                        var h3 = '<a href = "#" class="glyphicon glyphicon-new-window" style = "color: blue;padding-left:15px "data-toggle="modal" data-target="#CompanyContactModal" onclick="LoadDataSelect(' + data.CompanyId + ')"/a>'
+                                        var h4 = h1 + h2 + h3
+
+                                        return h4;
+
+
+                                    }
+
+                                }
+                            }
+                        ],
+                        "initComplete": function (settings, json) {
+                            // Validate first page
+                            if (json.recordsTotal > 0) {
+                                $("#CompanyTable").DataTable().page(0).draw(false);
+                            }
+
+                            // Modify pagination buttons
+                            $('.paginate_button').on('click', function () {
+                                if ($(this).hasClass('disabled')) {
+                                    return false;
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+        }
+        function Add() {
+
+            var ComObj = {
+                CompanyId: $('#CompanyId').val(),
+                CompanyName: $('#CompanyName').val(),
+                CompanyShortName: $('#CompanyShortName').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+               
+            };
+
+            $.ajax({
+                url: "/Company/Add",
+                data: JSON.stringify(ComObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    loadData();
+                    $('#myModal').modal('hide');
+                    $('#CompanyId').val();
+                    $('#CompanyName').val();
+                    $('#CompanyShortName').val();
+                    $('#StartDate').val();
+                    $('#EndDate').val();
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+        $('#btnAdd').click(function (e) {
+
+            allok = 0
+            msg = ' WARNING!!! \n'
+
+            var cname = $('#CompanyName').val();
+            var csname = $('#CompanyShortName').val();
+            var startdate = $('#StartDate').val();
+            var enddate = $('#EndDate').val();
+
+            if (cname.length == 0) {
+                allok = allok + 1
+                msg = msg + '\nCompany Name Cannot be Empty.\n';
+            }
+            if (csname.length == 0) {
+                allok = allok + 1
+                msg = msg + '\nCompany Short Name Cannot be Empty.\n';
+            }
+
+            if ((startdate == null || startdate == '') && (enddate != null && enddate != '')) {
+                allok = allok + 1
+                msg = msg + ',' + '\n End Date : Cannot enter End Date, if Start Date is blank.\n';
+            }
+
+            if (enddate != null && enddate != '') {
+                if (startdate != null && startdate != '') {
+                    var datam = moment($('#StartDate').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#EndDate').val());
+                    var dt2 = datam
+
+                    if ((enddate < startdate) == true) {
+                        allok = allok + 1
+                        msg = msg + '\n Invalid Dates, Please Enter The Correct StartDate & EndDate.\n';
+
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+               
+                Add()
+                $("#btnCancel").trigger("click");
+
+
+            }
+
+
+           
+
+
+        });
+        function Edit(ComID) {
+
+            $('#CompanyName').css('border-color', 'lightgrey');
+            $('#CompanyShortName').css('border-color', 'lightgrey');
+            $('#StartDate').css('border-color', 'lightgrey');
+            $('#EndDate').css('border-color', 'lightgrey');
+            $.ajax({
+                url: "/Company/GetbyID/" + ComID,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+
+                    $('#CompanyId').val(ComID);
+                    $('#CompanyName').val(result.CompanyName);
+                    $('#CompanyShortName').val(result.CompanyShortName);
+                    $('#LastUpdatedBy').val(result.LastUpdatedBy);
+                    $('#LastUpdatedDate').val(result.LastUpdatedDate);
+                    var datam = moment(result.StartDate);
+                    var StartDate = datam.format("YYYY-MM-DD");
+                    if (StartDate == '0001-01-01') {
+                        $('#StartDate').val(null);
+                    } else {
+                        $('#StartDate').val(StartDate);
+                    }
+
+                    var datam = moment(result.EndDate);
+                    var EndDate = datam.format("YYYY-MM-DD");
+                    if (EndDate == '0001-01-01') {
+                        $('#EndDate').val(null);
+                    } else {
+                        $('#EndDate').val(EndDate);
+                    }
+
+                    $('#btnUpdate').show();
+                    $('#btnAdd').hide();
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+        $('#btnUpdate').click(function (e) {
+
+            allok = 0
+            msg = ''
+            alert($('#CompanyId').val())
+            var comname1 = $('#CompanyName').val();
+            var comname2 = $('#CompanyShortName').val();
+            var SD1 = $('#StartDate').val();
+            var ED1 = $('#EndDate').val();
+
+            if (comname1.length == 0) {
+                               
+                    allok = allok + 1
+
+                msg = 'WARNING!!\nCompany Name Cannot be Empty.\n ';           
+            }
+            if (comname2.length == 0) {
+
+                allok = allok + 1
+
+                msg = 'WARNING!!\nCompany Short Name Cannot be Empty.\n ';
+            }
+            if ((SD1 == null || SD1 == '') && (ED1 != null && ED1 != '')) {
+                allok = allok + 1
+ 
+                    msg = msg + 'WARNING!!!\nPlease Enter The StartDate.\n';
+              
+            }
+
+            if (ED1 != null && ED1 != '') {
+                if (SD1 != null && SD1 != '') {
+                    var datam = moment($('#StartDate').val());
+                    var dt2 = datam
+
+                    var datam = moment($('#EndDate').val());
+                    var dt3 = datam
+
+                    if ((ED1 < SD1) == true) {
+                        allok = allok + 1
+                        msg = msg + 'WARNING!!! \n startDate & EndDate  is Invalid Date. So Please Enter The Correct StartDate & EndDate.\n';
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+                //Update date into Database
+                Update()
+                $("#btnCancel").trigger("click");
+
+            }
+
+        });
+        function Update() {
+            alert($('#CompanyId').val())
+            var ComObj = {
+                CompanyId: $('#CompanyId').val(),
+                CompanyName: $('#CompanyName').val(),
+                CompanyShortName: $('#CompanyShortName').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+            };
+
+            $.ajax(
+                {
+                    url: "/Company/Update",
+                    data: JSON.stringify(ComObj),
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData();
+                        /* $('#myModal').modal('hide');*/
+                        $('#CompanyId').val("");
+                        $('#CompanyName').val("");
+                        $('#CompanyShortName').val("");
+                        $('#StartDate').val("");
+                        $('#EndDate').val("");
+                       
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+        }
+        function Delete(ID) {
+            var ans = confirm("Are you sure you want to delete this ID?");
+            if (ans) {
+                $.ajax({
+                    url: "/Company/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData();
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+        function clearTextBox() {
+            $('#CompanyId').val("");
+            $('#CompanyName').val("");
+            $('#CompanyShortName').val("");
+            $('#StartDate').val("");
+            $('#EndDate').val("");
+            $('#ContactId').val(),
+
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+            $('#CompanyName').css('border-color', 'lightgrey');
+            $('#CompanyShortName').css('border-color', 'lightgrey');
+            $('#StartDate').css('border-color', 'lightgrey');
+            $('#EndDate').css('border-color', 'lightgrey');
+
+        }
+
+        /* ......................company contact ...................*/
+
+        function LoadDataSelect(id) {
+            $('#txtCompanyId').val(id);
+
+            $.ajax({
+                url: "/Company/CompanyContactList/" + id,
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    $('#ContactTable').DataTable({
+                        "bDestroy": true,
+                        data: data,
+                        columns: [
+
+                            { data: "CompanyId", "visible": false },
+                            { data: "ContactId" },
+                            { data: "ContactName" },
+                            { data: "MobileNo" },
+                            { data: "PhoneNo" },
+                            { data: "EmailId" },
+                            { data: "Department" },
+                            { data: "Designation" },
+                            {
+                                data: "ContactStartDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            {
+                                data: "ContactEndDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY")
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            { data: "LastUpdatedByName" },
+                            {
+                                data: "LastUpdatedDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+
+
+                            {
+                                data: null,
+
+                                render: function (data) {
+                                    var h1 = '<a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#AddCompanyContactModal" onclick=EditCompanyContact(' + data.ContactId + ')/a> '
+                                    var h2 = '<a href = "#" class="glyphicon glyphicon-trash" style = "color: red;padding-left:15px " onclick = DeleteCompanyContact(' + data.ContactId + ')/a> '
+                                    var h3 = h1 + h2
+                                    return h3
+                                }
+                            }
+                        ],
+                        "initComplete": function (settings, json) {
+                            if (json.recordsTotal > 0) {
+                                $("#ContactTable").DataTable().page(0).draw(false);
+                            }
+
+
+                            $('.paginate_button').on('click', function () {
+                                if ($(this).hasClass('disabled')) {
+                                    return false;
+
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        function AddCompanyContact(id) {
+
+            id = $('#txtCompanyId').val()
+            var Comcontact = {
+                CompanyId: $('#txtCompanyId').val(),
+                ContactId: $('#ContactId').val(),   
+                ContactName: $('#ContactName').val(),
+                MobileNo: $('#MobileNo').val(),
+                PhoneNo: $('#PhoneNo').val(),
+                EmailId: $('#EmailId').val(),
+                Department: $('#Department').val(),
+                Designation: $('#Designation').val(),
+                ContactStartDate: $('#ContactStartDate').val(),
+                ContactEndDate: $('#ContactEndDate').val(),
+                LastUpdatedBy: $('#LastUpdatedBy').val(),
+                LastUpdatedDate: $('#LastUpdatedDate').val(),
+
+            };
+
+            $.ajax({
+                url: "/Company/AddcompanyContact/" + id,
+                data: JSON.stringify(Comcontact),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    LoadDataSelect();
+                    $('#AddCompanyContactModal').modal('hide');
+                    $('#CompanyId').val();
+                    $('#ContactId').val();                  
+                    $('#ContactName').val();
+                    $('#MobileNo').val();
+                    $('#PhoneNo').val();
+                    $('#EmailId').val();
+                    $('#Department').val();
+                    $('#Designation').val();
+                    $('#ContactStartDate').val();
+                    $('#ContactEndDate').val();
+                    $('#LastUpdatedBy').val();
+                    $('#LastUpdatedDate').val();
+
+                },
+
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+
+            });
+            return false;
+        }
+        $('#btnContactAdd').click(function (e) {
+            allok = 0
+            msg = ' WARNING!!! \n'
+
+            var cname = $('#ContactName').val();
+            var startdate = $('#ContactStartDate').val();
+            var enddate = $('#ContactEndDate').val();
+
+            if (cname.length == 0) {
+                allok = allok + 1
+                msg = msg + '\nContact Name Cannot be Empty.\n';
+            }
+            
+            if ((startdate == null || startdate == '') && (enddate != null && enddate != '')) {
+                allok = allok + 1
+                msg = msg + ',' + '\n End Date : Cannot enter End Date, if Start Date is blank.\n';
+            }
+
+            if (enddate != null && enddate != '') {
+                if (startdate != null && startdate != '') {
+                    var datam = moment($('#StartDate').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#EndDate').val());
+                    var dt2 = datam
+
+                    if ((enddate < startdate) == true) {
+                        allok = allok + 1
+                        msg = msg + '\n Invalid Dates, Please Enter The Correct StartDate & EndDate.\n';
+
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+
+                AddCompanyContact()
+                $("#btnContactCancel").trigger("click");
+
+
+            }
+
+        });
+        function EditCompanyContact(ComConID) {
+            $('#CompanyId').css('border-color', 'lightgrey');
+            $('#ContactId').css('border-color', 'lightgrey');            
+            $('#ContactName').css('border-color', 'lightgrey');
+            $('#MobileNo').css('border-color', 'lightgrey');
+            $('#PhoneNo').css('border-color', 'lightgrey');
+            $('#EmailId').css('border-color', 'lightgrey');
+            $('#Department').css('border - color', 'lightgrey');
+            $('#Designation').css('border-color', 'lightgrey');
+            $('#ContactStartDate').css('border-color', 'lightgrey');
+            $('#ContactEndDate').css('border-color', 'lightgrey');
+            $('#LastUpdatedBy').css('border-color', 'lightgrey');
+            $('#LastUpdatedDate').css('border-color', 'lightgrey');
+            $('#txtContactId').val(ComConID);
+
+            $.ajax({
+                
+                url: "/Company/getbyIDCompanyContact/" + ComConID,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    $('#CompanyId').val(result.CompanyId);
+                    $('#ContactId').val(ComConID);
+                   
+                    $('#ContactName').val(result.ContactName);
+                    $('#MobileNo').val(result.MobileNo);
+                    $('#PhoneNo').val(result.PhoneNo);
+                    $('#EmailId').val(result.EmailId);
+                    $('#Department').val(result.Department);
+                    $('#Designation').val(result.Designation);
+                    $('#LastUpdatedBy').val(result.LastUpdatedBy);
+                    $('#LastUpdatedDate').val(result.LastUpdatedDate);
+
+                    var datam = moment(result.ContactStartDate);
+                    var ContactStartDate = datam.format("YYYY-MM-DD");
+                    if (ContactStartDate == '0001-01-01') {
+                        $('#ContactStartDate').val(null);
+                    } else {
+                        $('#ContactStartDate').val(ContactStartDate);
+                    }
+
+                    var datam = moment(result.ContactEndDate);
+                    var ContactEndDate = datam.format("YYYY-MM-DD");
+                    if (ContactEndDate == '0001-01-01') {
+                        $('#ContactEndDate').val(null);
+                    } else {
+                        $('#ContactEndDate').val(ContactEndDate);
+                    }
+
+
+                    /*  $('#AddCompanyContactModal').modal('show');*/
+                    $('#btnContactUpdate').show();
+                    $('#btnContactAdd').hide();
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+        $('#btnContactUpdate').click(function (e) {
+            allok = 0
+            msg = ' WARNING!!! \n'
+
+            var cname = $('#ContactName').val();
+            var startdate = $('#ContactStartDate').val();
+            var enddate = $('#ContactEndDate').val();
+
+            if (cname.length == 0) {
+                allok = allok + 1
+                msg = msg + '\nContact Name Cannot be Empty.\n';
+            }
+
+            if ((startdate == null || startdate == '') && (enddate != null && enddate != '')) {
+                allok = allok + 1
+                msg = msg + ',' + '\n End Date : Cannot enter End Date, if Start Date is blank.\n';
+            }
+
+            if (enddate != null && enddate != '') {
+                if (startdate != null && startdate != '') {
+                    var datam = moment($('#StartDate').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#EndDate').val());
+                    var dt2 = datam
+
+                    if ((enddate < startdate) == true) {
+                        allok = allok + 1
+                        msg = msg + '\n Invalid Dates, Please Enter The Correct StartDate & EndDate.\n';
+
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+
+                UpdateCompanyContact()
+                $("#btnContactCancel").trigger("click");
+
+
+            }
+
+
+            
+        });
+        function UpdateCompanyContact() {
+            var cid = $('#CompanyId').val();
+            var contactObj = {
+                CompanyId: $('#CompanyId').val(),
+                ContactId: $('#ContactId').val(),
+                
+                ContactName: $('#ContactName').val(),
+                MobileNo: $('#MobileNo').val(),
+                PhoneNo: $('#PhoneNo').val(),
+                EmailId: $('#EmailId').val(),
+                Department: $('#Department').val(),
+                Designation: $('#Designation').val(),
+                ContactStartDate: $('#ContactStartDate').val(),
+                ContactEndDate: $('#ContactEndDate').val(),
+
+            };
+
+            $.ajax({
+                url: "/Company/UpdateCompanyContact/",
+                data: JSON.stringify(contactObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                /* dataType: "json",*/
+                success: function (result) {
+                    $.ajax({
+                        url: "/Company/CompanyContactList/" + cid,
+                        type: "GET",
+                        dataType: "json",
+                        success: function (data) {
+                            $('#ContactTable').DataTable({
+                                "bDestroy": true,
+                                data: data,
+                                
+                                columns: [
+                                    { data: "CompanyId", "visible": false },
+                                    { data: "ContactId" },                                   
+                                    { data: "ContactName" },
+                                    { data: "MobileNo" },
+                                    { data: "PhoneNo" },
+                                    { data: "EmailId" },
+                                    { data: "Department" },
+                                    { data: "Designation" },
+                                    {
+                                        data: "StartDate",
+                                        render: function (data) {
+                                            var date1 = moment(data).format("DD-MM-YYYY");
+                                            if (date1 == '01-01-0001') {
+                                                return null;
+                                            } else {
+                                                return moment(data).format("DD-MM-YYYY");
+                                            }
+                                        }
+                                    },
+                                    {
+                                        data: "EndDate",
+                                        render: function (data) {
+                                            var date1 = moment(data).format("DD-MM-YYYY")
+                                            if (date1 == '01-01-0001') {
+                                                return null;
+                                            } else {
+                                                return moment(data).format("DD-MM-YYYY");
+                                            }
+                                        }
+                                    },
+                                    { data: "LastUpdatedByName" },
+                                    {
+                                        data: "LastUpdatedDate",
+                                        render: function (data) {
+                                            var date1 = moment(data).format("DD-MM-YYYY");
+                                            if (date1 == '01-01-0001') {
+                                                return null;
+                                            } else {
+                                                return moment(data).format("DD-MM-YYYY");
+                                            }
+                                        }
+                                    },
+                                    {
+                                        data: null,
+
+                                        render: function (data) {
+                                            var h1 = '<a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#ContactAddEditModal" onclick=ContactGetById(' + data.ContactId + ')/a>'
+                                            var h2 = '<a href = "#" id=" + row.id + "class="glyphicon glyphicon-trash" style = "color: red;padding-left:15px " onclick=ContactDelete(' + data.ContactId + ')/a>'
+                                            var h3 = h1 + h2
+                                            return h3
+                                        }
+                                    }
+                                ],
+                            });
+
+                        }
+                    });
+
+                    ContactClearTextBox()
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+
+            
+        }
+        function DeleteCompanyContact(ID) {
+            var cid = $('#txtCompanyId').val();
+            var ans = confirm("Are you sure you want to delete this ID?");
+            if (ans) {
+                $.ajax({
+                    url: "/Company/DeleteCompanyContact/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $.ajax({
+                            url: "/Company/CompanyContactList/" + cid,
+                            type: "GET",
+                            dataType: "json",
+                            success: function (data) {
+                                $('#ContactTable').DataTable({
+                                    "bDestroy": true,
+                                    data: data,
+
+                                    columns: [
+                                        { data: "CompanyId", "visible": false },
+                                        { data: "ContactId" },                                      
+                                        { data: "ContactName" },
+                                        { data: "MobileNo" },
+                                        { data: "PhoneNo" },
+                                        { data: "EmailId" },
+                                        { data: "Department" },
+                                        { data: "Designation" },
+                                        {
+                                            data: "StartDate",
+                                            render: function (data) {
+                                                var date1 = moment(data).format("DD-MM-YYYY");
+                                                if (date1 == '01-01-0001') {
+                                                    return null;
+                                                } else {
+                                                    return moment(data).format("DD-MM-YYYY");
+                                                }
+                                            }
+                                        },
+                                        {
+                                            data: "EndDate",
+                                            render: function (data) {
+                                                var date1 = moment(data).format("DD-MM-YYYY")
+                                                if (date1 == '01-01-0001') {
+                                                    return null;
+                                                } else {
+                                                    return moment(data).format("DD-MM-YYYY");
+                                                }
+                                            }
+                                        },
+                                        { data: "LastUpdatedByName" },
+                                        {
+                                            data: "LastUpdatedDate",
+                                            render: function (data) {
+                                                var date1 = moment(data).format("DD-MM-YYYY");
+                                                if (date1 == '01-01-0001') {
+                                                    return null;
+                                                } else {
+                                                    return moment(data).format("DD-MM-YYYY");
+                                                }
+                                            }
+                                        },
+                                        {
+                                            data: null,
+
+                                            render: function (data) {
+                                                var h1 = '<a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#ContactAddEditModal" onclick=ContactGetById(' + data.ContactId + ')/a>'
+                                                var h2 = '<a href = "#" id=" + row.id + "class="glyphicon glyphicon-trash" style = "color: red;padding-left:15px " onclick=ContactDelete(' + data.ContactId + ')/a>'
+                                                var h3 = h1 + h2
+                                                return h3
+                                            }
+                                        }
+                                    ],
+                                });
+
+                            }
+                        });
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+        function clearContactTextBox() {
+            $('#ContactId').val(""),
+                $('#CompanyId').val(""),
+                $('#ContactName').val(""),
+                $('#MobileNo').val(""),
+                $('#PhoneNo').val(""),
+                $('#EmailId').val(""),
+                $('#Department').val(""),
+                $('#Designation').val(""),
+                $('#ContactStartDate').val(""),
+                $('#ContactEndDate').val(""),
+                $('#LastUpdatedBy').val(""),
+                $('#LastUpdatedDate').val(""),
+
+                $('#btnContactUpdate').hide();
+            $('#btnContactAdd').show();
+
+
+
+            $('#ContactId').css('border-color', 'lightgrey');
+            $('#CompanyId').css('border-color', 'lightgrey');
+            $('#ContactName').css('border-color', 'lightgrey');
+            $('#MobileNo').css('border-color', 'lightgrey');
+            $('#PhoneNo').css('border-color', 'lightgrey');
+            $('#EmailId').css('border-color', 'lightgrey');
+            $('#Department').css('border - color', 'lightgrey');
+            $('#Designation').css('border-color', 'lightgrey');
+            $('#ContactStartDate').css('border-color', 'lightgrey');
+            $('#ContactEndDate').css('border-color', 'lightgrey');
+            $('#LastUpdatedBy').css('border-color', 'lightgrey');
+            $('#LastUpdatedDate').css('border-color', 'lightgrey');
+
+
+        }
+    </script>
+}
+
+

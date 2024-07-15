@@ -1,0 +1,111 @@
+﻿table#Table table.dataTable tbody th, table.dataTable tbody td {
+    padding: 0px 5px !important;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+.form-group {
+    margin-top:10px;
+
+}
+
+.form-control {
+    margin-top:-5px;
+    height: 25px;
+    padding: 0px 4px;
+
+}
+
+.empd {
+    padding: 20px;
+    line-height: 2.0rem;
+}
+
+.modal-footer {
+    padding: 5px;
+    position: sticky;
+   
+    top: 0;
+    bottom: 0px;
+    width: 100%;
+    z-index: 1;
+}
+
+/*-----------popModel Designs---------------------*/
+.NavContainer {
+    margin-left: 25px;
+    border: 2px solid blue;
+    background-color: #96DED1;
+    height: 60px;
+    width: 1200px;
+}
+
+.MainContainer {
+    padding: 10px;
+    margin-top:-15px;
+    height:390px;
+    width: 1200px;
+    margin-left:15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.FirstContainer {
+    background-color: #9FE2BF;
+   
+    padding: 20px;
+   
+   
+    border: solid 2px blue;
+   
+}
+
+.SecondContainer {
+    background-color: #FFB6C1;
+    padding: 20px;
+   
+    border: solid 2px blue;
+  
+ 
+}
+
+.ThirdContainer {
+    background-color: #B0E0E6;
+    padding: 20px;
+    
+    border: solid 2px blue;
+    
+}
+.fourthcontainer {
+    border: solid 2px blue;
+    height: 280px;
+    width: 180px;
+    padding:20px;
+    background-color: #D8BFD8;
+}
+.form-group.row {
+    align-items: center;
+}
+
+.col-form-label.text-left {
+    text-align: left;
+}
+
+.form-control.text-right {
+    text-align: right;
+}
+
+
+/*left -right alignment  inside box*/
+.form-group.row {
+    margin-bottom: 5px;
+}
+
+.col-form-label {
+    justify-content: start;
+    text-align: right;
+}
+
+input[type="text"], input[type="checkbox"] {
+    width: 100%;
+}

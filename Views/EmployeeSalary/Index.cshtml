@@ -1,0 +1,1035 @@
+﻿@model  HrmsWeb.Models.EmployeeSalaryModel
+@{
+    ViewBag.Title = "Index";
+}
+<div style="display: flex; justify-content: space-between;margin-top:-15px;">
+    <h3>Employee Salary </h3>
+    <button type="button" style=" height:30px;width:200px; margin-top:20px;" class="btn btn-primary " data-toggle="modal" data-target="#myModal" onclick="ClearTextBox();">
+        Add Employee Salary
+    </button>
+</div>
+<p class="container" style="margin-top:-10px;">
+    <div class="form-group row justify-content-center mb-1" style="margin-right:-10px; background-color: #EEEEEE; border: solid 2px blue; height: 110px; width: 1200px; ">
+        <div class="col-sm-2">
+            <label for="srEmployeeId" class="col-form-label" style="font-size: 11px !important;">Employee</label>
+            @Html.DropDownListFor(m => m.srEmployeeId, new SelectList(ViewBag.employee, "EmployeeId", "EmployeeName"), new { @class = "form-control", style = "font-size: 11px !important;" })
+        </div>
+        <div class="col-sm-2">
+            <label for="srClientId" class="col-form-label" style="font-size: 11px !important;">Client</label>
+            @Html.DropDownListFor(m => m.srClientId, new SelectList(ViewBag.client, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control", style = "font-size: 11px !important;" })
+        </div>
+        <div class="col-sm-2">
+            <label for="srStackId" class="col-form-label" style="font-size: 11px !important;">Stack</label>
+            @Html.DropDownListFor(m => m.srStackId, new SelectList(ViewBag.StackList, "StackId", "StackDetailName"), new { @class = "form-control", style = "font-size: 11px !important;" })
+        </div>
+        <div class="col-sm-2">
+            <label for="srDesignationId" class="col-form-label" style="font-size: 11px !important;">Designation</label>
+            @Html.DropDownListFor(m => m.srDesignationId, new SelectList(ViewBag.designation, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control", style = "font-size: 11px !important;" })
+        </div>
+        <div class="col-sm-2">
+            <label for="srDepartmentId" class="col-form-label" style="font-size: 11px !important;">Department</label>
+            @Html.DropDownListFor(m => m.srDepartmentId, new SelectList(ViewBag.department, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control", style = "font-size: 11px !important;" })
+        </div>
+        <div class="col-sm-2">
+            <label for="srReligionId" class="col-form-label" style="font-size: 11px !important;">Religion</label>
+            @Html.DropDownListFor(m => m.srReligionId, new SelectList(ViewBag.religion, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control", style = "font-size: 11px !important;" })
+        </div>
+        <div class="col-sm-2">
+            <label for="srNationalityId" class="col-form-label" style="font-size: 11px !important;">Nationality</label>
+            @Html.DropDownListFor(m => m.srNationalityId, new SelectList(ViewBag.nationality, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control", style = "font-size: 11px !important;" })
+        </div>
+        <div class="col-sm-2">
+            <label for="srGenderId" class="col-form-label" style="font-size: 11px !important;">Gender</label>
+            @Html.DropDownListFor(m => m.srGenderId, new SelectList(ViewBag.gender, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control", style = "font-size: 11px !important;" })
+        </div>
+        <div class="col-sm-2">
+            <div class="row">
+                <div class="col-sm-6">
+                    <button id="btnSearch" type="button" style="font-size: 11px !important; margin-top:20px;" class="btn btn-primary col-form-label" onclick="loadSearch();">Search</button>
+                </div>
+                <div class="col-sm-6">
+                    <button id="btnRefresh" type="button" style="font-size: 11px !important; margin-top:20px;" class="btn btn-primary col-form-label" onclick="clearDropDownBox();">ClearDropdown</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p>
+
+<div style="width: fit-content; height: fit-content; margin-top: -10px; margin-right:10px;">
+    <table class="table table-bordered stripe row-border order-column" style="width:100%" id="ESTable">
+
+        <thead class="bg-primary" style="width:1200px;">
+            <tr>
+                <th>ESID</th>
+                <th>Employee</th>
+                <th>Stack</th>
+                <th>Department </th>
+                <th>Designation </th>
+                <th>Client </th>
+                <th>Religion </th>
+                <th>Gender </th>
+                <th>Nationality </th>
+                <th>WEFrom</th>
+                <th>WETo</th>
+                <th>CTC_Month</th>
+                <th>CTC_PA</th>
+                <th>BDA</th>
+                <th>HRA</th>
+                <th>TA</th>
+                <th>MA</th>
+                <th>Bonus</th>
+                <th>SA</th>
+                <th>OA</th>
+                <th>Gross</th>
+                <th>EPF</th>
+                <th>EESI</th>
+                <th>OB</th>
+                <th>ESI</th>
+                <th>PF</th>
+                <th>VPF_Percentage</th>
+                <th>VPF_Amount</th>
+                <th>PT</th>
+                <th>TDS</th>
+                <th>OD</th>
+                <th>TOtBen</th>
+                <th>TotDed</th>
+                <th>NetPay</th>
+                <th>Increment</th>
+                <th>LastUpdatedBy</th>
+                <th>LastUpdatedDate</th>
+                <th>Remarks</th>
+
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody class="tbody" style="width:1px; white-space:nowrap; ">
+            <!-- Project records will be populated here -->
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-primary" onclick="history.back();">Back</button>
+</div>
+
+<div class="modal" data-backdrop="static" data-keyboard="false" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:1250px;height:fit-content;">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:cornflowerblue;">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Add Employee Salary</h4>
+                </div>
+
+            <form>
+                <div class="modal-body row">
+                    <div class="NavContainer">
+                        <div class="col-sm-2 hidden">
+                            <div class="form-group ">
+                                <label for="EmployeeSalaryId">ESID</label>
+                                <input type="text" class="form-control" id="EmployeeSalaryId" placeholder="EmployeeSalaryId" disabled="disabled" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label for="EmployeeId ">EmployeeId </label>
+                                @Html.DropDownListFor(m => m.EmployeeId, new SelectList(ViewBag.employee, "EmployeeId", "EmployeeName"), new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="StackId">StackId</label>
+                                @Html.DropDownListFor(m => m.StackId, new SelectList(ViewBag.StackList, "StackId", "StackDetailName"), new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="CTC_Month">CTC_Month</label>
+                                <input type="text" class="form-control" id="CTC_Month" placeholder="CTC_Month" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="CTC_PA">CTC_PA</label>
+                                <input type="text" class="form-control" id="CTC_PA" placeholder="CTC_PA" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="WEFrom">WEFrom</label>
+                                <input type="month" class="form-control" id="WEFrom" placeholder="" />
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label for="WETo">WETo</label>
+                                <input type="month" class="form-control" id="WETo" placeholder="" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="MainContainer">
+
+                    <div class="FirstContainer" style="width: 400px; height: 280px; ">
+                        <div class="form-group row">
+                            <label for="BDA" class="col-sm-5 col-form-label text-left">Basic</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text-right" id="BDA" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="HRA" class="col-sm-5 col-form-label text-left">HRA</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text-right" id="HRA" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="TA" class="col-sm-5 col-form-label text-left">Travell Allowance</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text-right" id="TA" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="MA" class="col-sm-5 col-form-label text-left">Medical Allowance</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text-right" id="MA" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Bonus" class="col-sm-5 col-form-label text-left">Bonus</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text-right" id="Bonus" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="SA" class="col-sm-5 col-form-label text-left">Special Allowance</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text-right" id="SA" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="OA" class="col-sm-5 col-form-label text-left">Other Allowance</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text-right" id="OA" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Gross" class="col-sm-5 col-form-label text-left">Gross</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control text-right" style="background-color:#8FBC8F;" id="Gross" placeholder="Gross" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="SecondContainer" style="height: 280px; width: 300px;">
+
+
+                        <div class="form-group row">
+                            <label for="PF" class="col-sm-5 col-form-label text-left">PF</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control text-right" id="PF" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ESI" class="col-sm-5 col-form-label text-left">ESI</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control text-right" id="ESI" placeholder="0.00" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="VPF_Percentage" class="col-sm-5 col-form-label text-left">VPF_%</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control text-right" id="VPF_Percentage" placeholder="0.00" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="VPF_Amount" class="col-sm-5 col-form-label text-left">VPF Amount</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control text-right" id="VPF_Amount" placeholder="0.00" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="PT" class="col-sm-5 col-form-label text-left">PT</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control text-right" id="PT" placeholder="0.00" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="TDS" class="col-sm-5 col-form-label text-left">TDS</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control text-right" id="TDS" placeholder="0.00" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="OD" class="col-sm-5 col-form-label text-left">OD</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control text-right" id="OD" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="TotDed" class="col-sm-5 col-form-label text-left">Total Deduction</label>
+                            <div class="col-sm-5">
+                                <input type="text" style="background-color: #FAA0A0;" class="form-control text-right" id="TotDed" placeholder="0.00" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="ThirdContainer" style="height: 280px; width: 320px;">
+
+
+                        <div class="form-group row">
+                            <label for="EPF" class="col-sm-5 col-form-label text-left">EPF</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control text-right " id="EPF" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="EESI" class="col-sm-5 col-form-label text-left">EESI</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control text-right" id="EESI" placeholder="0.00" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="OB" class="col-sm-5 col-form-label text-left">Other Benefits</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control text-right" id="OB" placeholder="0.00" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="TotBen" class="col-sm-5 col-form-label text-left">Total Benefits</label>
+                            <div class="col-sm-5">
+                                <input type="text" style="background-color:#9ACD32; " class="form-control text-right" id="TotBen" placeholder="0.00" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="NetPay" class="col-sm-5 col-form-label text-left">NetPay</label>
+                            <div class="col-sm-5">
+                                <input type="text" style="background-color:lightsteelblue;" class="form-control text-right" id="NetPay" placeholder="0.00" />
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="fourthcontainer">
+                        <div class="form-group row">
+                            <label for="Increment" class="col-sm-5 col-form-label text-left">Increment</label>
+                            <div class="col-sm-4">
+                                <input type="checkbox" class="form-check-input" id="Increment" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Remarks" class="col-sm-5 col-form-label text-left">Remarks</label>
+                            <div class="col-sm-12">
+                                <textarea class="form-control" id="Remarks" style="height:120px;" placeholder="Remarks"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnAdd" onclick="btnAdd_Click;">Save</button>
+                    <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" data-dismiss="modal" onclick="btnUpdate_Click;">Update</button>
+                    <button type="button" id="btnCancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+
+    <link href="~/Scripts/MyScripts/StyleSheet.css" rel="stylesheet" />
+
+
+    @*scroll referance link*@
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>*@
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/5.0.0/js/dataTables.fixedColumns.js"></script>
+    @*<script src="https://cdn.datatables.net/fixedcolumns/5.0.0/js/fixedColumns.bootstrap5.js"></script>*@
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap5.css" />
+    @*<link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/5.0.0/css/fixedColumns.bootstrap5.css" />*@
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            loadSearch();
+
+        });
+
+       /* ------------EmployeeSalary Calculation-------------------*/
+
+
+            function calculateAll() {
+                // Gross Calculation
+                var basic = parseFloat($('#BDA').val()) || 0;
+                var hra = parseFloat($('#HRA').val()) || 0;
+                var ta = parseFloat($('#TA').val()) || 0;
+                var ma = parseFloat($('#MA').val()) || 0;
+                var bonus = parseFloat($('#Bonus').val()) || 0;
+                var sa = parseFloat($('#SA').val()) || 0;
+                var oa = parseFloat($('#OA').val()) || 0;
+                var gross = basic + hra + ta + ma + bonus + sa + oa;
+                $('#Gross').val(gross.toFixed(2));
+
+                // VPF Amount Calculation
+                var vpfPercentage = parseFloat($('#VPF_Percentage').val()) || 0;
+                var vpfAmount = (basic * vpfPercentage) / 100;
+                $('#VPF_Amount').val(vpfAmount.toFixed(2));
+
+                // Total Deductions Calculation
+                var esi = parseFloat($('#ESI').val()) || 0;
+                var pf = parseFloat($('#PF').val()) || 0;
+                var pt = parseFloat($('#PT').val()) || 0;
+                var tds = parseFloat($('#TDS').val()) || 0;
+                var od = parseFloat($('#OD').val()) || 0;
+                var totalDeductions = esi + pf + vpfAmount + pt + tds + od;
+                $('#TotDed').val(totalDeductions.toFixed(2));
+
+                // Total Benefits Calculation
+                var epf = parseFloat($('#EPF').val()) || 0;
+                var eesi = parseFloat($('#EESI').val()) || 0;
+                var ob = parseFloat($('#OB').val()) || 0;
+                var totalBenefits = epf + eesi + ob;
+                $('#TotBen').val(totalBenefits.toFixed(2));
+
+                // Net Pay Calculation
+                var netPay = gross - totalDeductions;
+                $('#NetPay').val(netPay.toFixed(2));
+
+            }
+
+
+            $('#BDA, #HRA, #TA, #MA, #Bonus, #SA, #OA, #VPF_Percentage, #ESI, #PF, #VPF_Amount, #PT, #TDS, #OD, #EPF, #EESI, #OB, #Gross, #TotDed').on('input', calculateAll);
+
+
+            calculateAll();
+
+        /*  -------- Increment Checkbox validation---------*/
+
+        $('#Increment').change(function () {
+            if ($(this).is(":checked")) {
+                $('#Increment').val("1");
+            } else {
+                $('#Increment').val("0");
+            }
+        });
+        @* ------------------monthly/yearly salary calculation script----------------------------*@
+
+        $(document).ready(function () {
+            $('#CTC_Month').on('input', function () {
+                var MonthlySalary = $(this).val();
+                if ($.isNumeric(MonthlySalary)) {
+                    var annualSalary = MonthlySalary * 12;
+                    $('#CTC_PA').val(annualSalary.toFixed(2));
+                } else {
+                    $('#CTC_PA').val('');
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $('#CTC_PA').on('input', function () {
+                var PA = $(this).val();
+                if ($.isNumeric(PA)) {
+                    var annualSalary = PA / 12;
+                    $('#CTC_Month').val(annualSalary.toFixed(2));
+                } else {
+                    $('#CTC_Month').val('');
+                }
+            });
+        });
+
+    /*-------------------crud operations-------------*/
+
+
+        $('#btnAdd').click(function (e) {
+
+            allok = 0
+            msg = ' WARNING!!! \n'
+
+
+            var comname = $('#EmployeeId').val();
+            var WEFrom = $('#WEFrom').val();
+            var WETo = $('#WETo').val();
+
+
+            if (comname.length == 0) {
+
+                allok = allok + 1
+
+                msg = msg + '\EmployeeName Cannot be Empty.\n';
+            }
+
+
+            if ((WEFrom == null || WEFrom == '') && (WETo != null && WETo != '')) {
+                allok = allok + 1
+                msg = msg + ',' + '\n End Date : Cannot enter End Date, if Start Date is blank.\n';
+            }
+
+            if (WETo != null && WETo != '') {
+                if (WEFrom != null && WEFrom != '') {
+                    var datam = moment($('#WEFrom').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#WETo').val());
+                    var dt2 = datam
+
+                    if ((dt2 < dt1) == true) {
+                        allok = allok + 1
+                        msg = msg + '\n Invalid Dates, Please Enter The Correct StartDate & EndDate.\n';
+
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+
+                Add()
+                $("#btnCancel").trigger("click");
+
+
+            }
+
+        });
+        function Add() {
+
+            var ComObj = {
+                EmployeeId: $('#EmployeeId').val(),
+                StackId: $('#StackId').val(),
+                WEFrom: $('#WEFrom').val(),
+                WETo: $('#WETo').val(),
+                CTC_Month: $('#CTC_Month').val(),
+                CTC_PA: $('#CTC_PA').val(),
+                BDA: $('#BDA').val(),
+                HRA: $('#HRA').val(),
+                TA: $('#TA').val(),
+                MA: $('#MA').val(),
+                Bonus: $('#Bonus').val(),
+                SA: $('#SA').val(),
+                OA: $('#OA').val(),
+                Gross: $('#Gross').val(),
+                EPF: $('#EPF').val(),
+                EESI: $('#EESI').val(),
+                OB: $('#OB').val(),
+                ESI: $('#ESI').val(),
+                PF: $('#PF').val(),
+                VPF_Percentage: $('#VPF_Percentage').val(),
+                VPF_Amount: $('#VPF_Amount').val(),
+                PT: $('#PT').val(),
+                TDS: $('#TDS').val(),
+                OD: $('#OD').val(),
+                TotBen: $('#TotBen').val(),
+                TotDed: $('#TotDed').val(),
+                NetPay: $('#NetPay').val(),
+                Increment: $('#Increment').val(),
+                LastUpdatedBy: $('#LastUpdatedBy').val(),
+                LastUpdatedDate: $('#LastUpdatedDate').val(),
+                Remarks: $('#Remarks').val(),
+            };
+
+            $.ajax({
+                url: "/EmployeeSalary/Add",
+                data: JSON.stringify(ComObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                    loadData();
+                    $('#myModal').modal('hide');
+                    $('#EmployeeSalaryId').val();
+                    $('#EmployeeId').val();
+                    $('#StackId').val();
+                    $('#WEFrom').val();
+                    $('#WETo').val();
+                    $('#CTC_Month').val();
+                    $('#CTC_PA').val();
+                    $('#BDA').val();
+                    $('#HRA').val();
+                    $('#TA').val();
+                    $('#MA').val();
+                    $('#Bonus').val();
+                    $('#SA').val();
+                    $('#OA').val();
+                    $('#Gross').val();
+                    $('#EPF').val();
+                    $('#EESI').val();
+                    $('#OB').val();
+                    $('#ESI').val();
+                    $('#PF').val();
+                    $('#VPF_Percentage').val();
+                    $('#VPF_Amount').val();
+                    $('#PT').val();
+                    $('#TDS').val();
+                    $('#OD').val();
+                    $('#TotBen').val();
+                    $('#TotDed').val();
+                    $('#NetPay').val();
+                    $('#Increment').val();
+                    $('#LastUpdatedBy').val();
+                    $('#LastUpdatedDate').val();
+                    $('#Remarks').val();
+
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+
+        function Edit(ComID) {
+            $.ajax({
+                url: "/EmployeeSalary/GetbyID/" + ComID,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    $('#EmployeeSalaryId').val(ComID);
+                    $('#EmployeeId').val(result.EmployeeId);
+                    $('#StackId').val(result.StackId);
+                    $('#CTC_Month').val(result.CTC_Month);
+                    $('#CTC_PA').val(result.CTC_PA);
+                    $('#BDA').val(result.BDA);
+                    $('#HRA').val(result.HRA);
+                    $('#TA').val(result.TA);
+                    $('#MA').val(result.MA);
+                    $('#Bonus').val(result.Bonus);
+                    $('#SA').val(result.SA);
+                    $('#OA').val(result.OA);
+                    $('#Gross').val(result.Gross);
+                    $('#EPF').val(result.EPF);
+                    $('#EESI').val(result.EESI);
+                    $('#OB').val(result.OB);
+                    $('#ESI').val(result.ESI);
+                    $('#PF').val(result.PF);
+                    $('#VPF_Percentage').val(result.VPF_Percentage);
+                    $('#VPF_Amount').val(result.VPF_Amount);
+                    $('#PT').val(result.PT);
+                    $('#TDS').val(result.TDS);
+                    $('#OD').val(result.OD);
+                    $('#TotBen').val(result.TotBen);
+                    $('#TotDed').val(result.TotDed);
+                    $('#NetPay').val(result.NetPay);
+                    $('#Increment').val(result.Increment);
+                    $('#LastUpdatedBy').val(result.LastUpdatedBy);
+                    $('#LastUpdatedDate').val(result.LastUpdatedDate);
+                    $('#Remarks').val(result.Remarks);
+
+                    var datam = moment(result.WEFrom);
+                    var WEFrom = datam.format("YYYY-MM-DD");
+                    if (WEFrom == '0001-01-01') {
+                        $('#WEFrom').val(null);
+                    } else {
+                        $('#WEFrom').val(WEFrom);
+                    }
+
+                    var datam = moment(result.WETo);
+                    var WETo = datam.format("YYYY-MM-DD");
+                    if (WETo == '0001-01-01') {
+                        $('#WETo').val(null);
+                    } else {
+                        $('#WETo').val(WETo);
+                    }
+
+                    $('#btnUpdate').show();
+                    $('#btnAdd').hide();
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+        $('#btnUpdate').click(function (e) {
+
+            allok = 0
+            msg = ' WARNING!!! \n'
+            var comname1 = $('#EmployeeId').val();
+            var SD1 = $('#WEFrom').val();
+            var ED1 = $('#WETo').val();
+
+
+            if (comname1.length == 0) {
+
+                allok = allok + 1
+
+                msg = msg + '\EmployeeName Cannot be Empty.\n';
+            }
+
+            if ((SD1 == null || SD1 == '') && (ED1 != null && ED1 != '')) {
+                allok = allok + 1
+
+                msg = msg + ',' + '\n End Date : Cannot enter End Date, if Start Date is blank.\n';
+
+            }
+
+            if (ED1 != null && ED1 != '') {
+                if (SD1 != null && SD1 != '') {
+                    var datam = moment($('#WEFrom').val());
+                    var dt2 = datam
+
+                    var datam = moment($('#WETo').val());
+                    var dt3 = datam
+
+                    if ((dt3 < dt2) == true) {
+                        allok = allok + 1
+                        msg = msg + '\n Invalid Dates, Please Enter The Correct StartDate & EndDate.\n';
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+
+                Update()
+                $("#btnCancel").trigger("click");
+
+            }
+
+        });
+
+        function Update() {
+
+            var ComObj = {
+                EmployeeSalaryId: $('#EmployeeSalaryId').val(),
+                EmployeeId: $('#EmployeeId').val(),
+                StackId: $('#StackId').val(),
+                WEFrom: $('#WEFrom').val(),
+                WETo: $('#WETo').val(),
+                CTC_Month: $('#CTC_Month').val(),
+                CTC_PA: $('#CTC_PA').val(),
+                BDA: $('#BDA').val(),
+                HRA: $('#HRA').val(),
+                TA: $('#TA').val(),
+                MA: $('#MA').val(),
+                Bonus: $('#Bonus').val(),
+                SA: $('#SA').val(),
+                OA: $('#OA').val(),
+                Gross: $('#Gross').val(),
+                EPF: $('#EPF').val(),
+                EESI: $('#EESI').val(),
+                OB: $('#OB').val(),
+                ESI: $('#ESI').val(),
+                PF: $('#PF').val(),
+                VPF_Percentage: $('#VPF_Percentage').val(),
+                VPF_Amount: $('#VPF_Amount').val(),
+                PT: $('#PT').val(),
+                TDS: $('#TDS').val(),
+                OD: $('#OD').val(),
+                TotBen: $('#TotBen').val(),
+                TotDed: $('#TotDed').val(),
+                NetPay: $('#NetPay').val(),
+                Increment: $('#Increment').val(),
+                LastUpdatedBy: $('#LastUpdatedBy').val(),
+                LastUpdatedDate: $('#LastUpdatedDate').val(),
+                Remarks: $('#Remarks').val(),
+            };
+
+            $.ajax(
+                {
+                    url: "/EmployeeSalary/Update",
+                    data: JSON.stringify(ComObj),
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData();
+                        $('#EmployeeSalaryId').val("");
+                        $('#EmployeeId').val("");
+                        $('#StackId').val("");
+                        $('#WEFrom').val("");
+                        $('#WETo').val("");
+                        $('#CTC_Month').val("");
+                        $('#CTC_PA').val("");
+                        $('#BDA').val("");
+                        $('#HRA').val("");
+                        $('#TA').val("");
+                        $('#MA').val("");
+                        $('#Bonus').val("");
+                        $('#SA').val("");
+                        $('#OA').val("");
+                        $('#Gross').val("");
+                        $('#EPF').val("");
+                        $('#EESI').val("");
+                        $('#OB').val("");
+                        $('#ESI').val("");
+                        $('#PF').val("");
+                        $('#VPF_Percentage').val("");
+                        $('#VPF_Amount').val("");
+                        $('#PT').val("");
+                        $('#TDS').val("");
+                        $('#OD').val("");
+                        $('#TotBen').val("");
+                        $('#TotDed').val("");
+                        $('#NetPay').val("");
+                        $('#Increment').val("");
+                        $('#LastUpdatedBy').val("");
+                        $('#LastUpdatedDate').val("");
+                        $('#Remarks').val("");
+
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+        }
+
+        function Delete(ID) {
+            var ans = confirm("Are you sure you want to delete this ID?");
+            if (ans) {
+                $.ajax({
+                    url: "/EmployeeSalary/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData();
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+        function clearTextBox() {
+            $('#EmployeeSalaryId').val("");
+            $('#EmployeeId').val("");
+            $('#SalaryStackId').val("");
+            $('#WEFrom').val("");
+            $('#WETo').val("");
+            $('#CTC_Month').val(""),
+                $('#CTC_PA').val(""),
+                $('#BDA').val(""),
+                $('#HRA').val(""),
+                $('#TA').val(""),
+                $('#MA').val(""),
+                $('#Bonus').val(""),
+                $('#SA').val(""),
+                $('#OA').val(""),
+                $('#Gross').val(""),
+                $('#EPF').val(""),
+                $('#EESI').val(""),
+                $('#OB').val(""),
+                $('#ESI').val(""),
+                $('#PF').val(""),
+                $('#VPF_Percentage').val(""),
+                $('#VPF_Amount').val(""),
+                $('#PT').val(""),
+                $('#TDS').val(""),
+                $('#OD').val(""),
+                $('#TotBen').val(""),
+                $('#TotDed').val(""),
+                $('#NetPay').val(""),
+                $('#Increment').val(""),
+                $('#LastUpdatedBy').val(""),
+                $('#LastUpdatedDate').val(""),
+                $('#Remarks').val(""),
+
+                $('#btnUpdate').hide();
+            $('#btnAdd').show();
+
+
+        }
+
+        /*search btn*/
+
+
+        function loadSearch() {
+
+            var ESObj = {
+
+                srEmployeeId: $('#srEmployeeId').val(),
+                srStackId: $('#srStackId').val(),
+                srClientId: $('#srClientId').val(),
+                srDepartmentId: $('#srDepartmentId').val(),
+                srDesignationId: $('#srDesignationId').val(),
+                srGenderId: $('#srGenderId').val(),
+                srReligionId: $('#srReligionId').val(),
+                srNationalityId: $('#srNationalityId').val(),
+
+            };
+
+            $.ajax({
+                url: "/EmployeeSalary/List/",
+                data: JSON.stringify(ESObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (data)
+                {
+
+                    $('#ESTable').DataTable({
+                        fixedColumns: {
+                            start: 3,
+                            end: 2
+                        },
+
+                       /* paging: true,*/
+                        scrollCollapse: true,
+                        scrollX: 1200,
+                        scrollY: true,
+                        "bDestroy": true,
+                        data: data,
+                        columns: [
+                            { data: "EmployeeSalaryId"},
+                            { data: "EmployeeName"},
+                            { data: "StackDetailName" },
+                            { data: "DepartmentName"},
+                            { data: "DesignationName"},
+                            { data: "ClientName" },
+                            { data: "ReligionName" },
+                            { data: "GenderName" },
+                            { data: "NationalityName" },
+
+                            {
+                                data: "WEFrom",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            {
+                                data: "WETo",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY")
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            { data: "CTC_Month" },
+                            { data: "CTC_PA" },
+                            { data: "BDA" },
+                            { data: "HRA" },
+                            { data: "TA" },
+                            { data: "MA" },
+                            { data: "Bonus" },
+                            { data: "SA" },
+                            { data: "OA" },
+                            { data: "Gross" },
+                            { data: "EPF" },
+                            { data: "EESI" },
+                            { data: "OB" },
+                            { data: "ESI" },
+                            { data: "PF" },
+                            { data: "VPF_Percentage" },
+                            { data: "VPF_Amount" },
+                            { data: "PT" },
+                            { data: "TDS" },
+                            { data: "OD" },
+                            { data: "TotBen" },
+                            { data: "TotDed" },
+                            { data: "NetPay" },
+                            { data: "Increment" },
+                            { data: "LastUpdatedByName" },
+
+                            {
+                                data: "LastUpdatedDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+
+                            { data: "Remarks" },
+
+                            {
+                                data: null,
+                                render: function (data) {
+                                    {
+
+                                        var h1 = '<a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#myModal" onclick=Edit(' + data.EmployeeSalaryId + ')/a> '
+                                        var h2 = '<a href = "#" class="glyphicon glyphicon-trash" style = "color: red;padding-left:15px " onclick = Delete(' + data.EmployeeSalaryId + ')/a> '
+                                        /*var h3 = '<a href = "#" class="glyphicon glyphicon-new-window" style = "color: blue;padding-left:15px "data-toggle="modal" data-target="#CompanyContactModal" onclick="LoadDataSelect(' + data.ProjectId + ')"/a>'*/
+                                        var h4 = h1 + h2
+
+                                        return h4;
+
+
+                                    }
+
+                                }
+                            }
+                        ],
+                        //"initComplete": function (settings, json) {
+                        //    // Validate first page
+                        //    if (json.recordsTotal > 0) {
+                        //        $("#ESTable").DataTable().page(0).draw(false);
+                        //    }
+
+                        //    /* Modify pagination buttons*/
+                        //    $('.paginate_button').on('click', function () {
+                        //        if ($(this).hasClass('disabled')) {
+                        //            return false;
+                        //        }
+                        //    });
+                        //}
+                    });
+
+
+                }
+            });
+        }
+
+        function clearDropDownBox() {
+
+            $('#srEmployeeId').val(0);
+            $('#srClientId').val(0);
+            $('#srStackId').val(0);
+            $('#srDesignationId').val(0);
+            $('#srDepartmentId').val(0);
+            $('#srGenderId').val(0);
+            $('#srNationalityId').val(0);
+            $('#srReligionId').val(0);
+
+
+                $('#btnUpdate').hide();
+            $('#btnAdd').show();
+
+
+        }
+
+    </script>
+}

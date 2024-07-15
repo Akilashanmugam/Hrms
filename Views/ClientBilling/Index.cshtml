@@ -1,0 +1,550 @@
+﻿@model  HrmsWeb.Models.ClientBillingModel
+
+@{
+    ViewBag.Title = "Index";
+}
+<div style="margin-left:-60px;">
+    <h3>Client Billing </h3>
+
+    <p class="container">
+        <div class="form-group row justify-content-center mb-1">
+            <div class="col-sm-2">
+                <label for="srClientId" class="col-form-label">Client</label>
+                @Html.DropDownListFor(m => m.srClientId, new SelectList(ViewBag.client, "ClientId", "ClientName"), new { @class = "form-control", style = "margin-left:0px;" })
+            </div>
+            <div class="col-sm-2">
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-sm-6">
+                        <button id="btnSearch" type="button" class="btn btn-primary col-form-label btn-search glyphicon glyphicon-search" onclick="loadData();"></button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-primary btn-add" data-toggle="modal" data-target="#myModal" onclick="ClearTextBox();">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p>
+   
+    <div style="margin-top:10px; margin-right:10px;">
+        <div class="table-container">
+            <table class="table table-bordered stripe row-border order-column" style="width:100%;" id="ClientBillingTable">
+
+                <thead class="bg-primary" style="width:1200px;">
+                    <tr>
+                        <th>ID</th>
+                        <th>Client</th>
+                        <th>Project</th>
+                        <th>Location </th>
+                        <th>Maximum Billable Days</th>
+                        <th>Billing Period From</th>
+                        <th>Billing Period To</th>
+                        <th>Leaves Allowed Per_Month</th>
+                        <th>PAN No </th>
+                        <th>GSTIN No</th>
+                        <th>Valid From</th>
+                        <th>Valid To</th>
+                        <th>Last Updated By</th>
+                        <th>Last Updated Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody class="tbody" style="width:1px; white-space:nowrap;">
+                    <!-- POM records will be populated here -->
+                </tbody>
+            </table>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="history.back();">Back</button>
+    </div>
+</div>
+
+<div class="modal" data-backdrop="static" data-keyboard="false" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:700px;">
+        <div class="modal-content">
+
+            <div class="modal-header btn-primary">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="myModalLabel">Client Billing</h4>
+            </div>
+            <div class="modal-body row">
+                <form>
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label for="CBId">CBId</label>
+                            <input type="text" class="form-control" id="CBId" placeholder="CBId" disabled="disabled" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ClientId" class="col-form-label">Client</label>
+                            @Html.DropDownListFor(m => m.ClientId, new SelectList(ViewBag.client, "ClientId", "ClientName"), new { @class = "form-control", id = "ClientId" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ProjectId" class="col-form-label">Project</label>
+                            @Html.DropDownListFor(m => m.ProjectId, new SelectList(new List<SelectListItem>{new SelectListItem { Value = "0", Text = "-----Select-----" } }, "Value", "Text"), new { @class = "form-control", id = "ProjectId" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="LocationId" class="col-form-label">Location </label>
+                            @Html.DropDownListFor(m => m.LocationId, new SelectList(ViewBag.location, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label for="MaximumBillableDays">Maximum Billable Days</label>
+                            <input type="text" class="form-control" id="MaximumBillableDays" placeholder="MaximumBillableDays" />
+                        </div>
+                        <div class="form-group">
+                            <label for="BillingPeriodFrom">Billing Period From</label>
+                            <input type="text" class="form-control" id="BillingPeriodFrom" placeholder="BillingPeriodFrom" />
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+
+                        <div class="form-group">
+                            <label for="BillingPeriodTo">Billing Period To</label>
+                            <input type="text" class="form-control" id="BillingPeriodTo" placeholder="BillingPeriodTo" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="LeavesAllowedPerMonth">Leaves Allowed Per Month</label>
+                            <input type="text" class="form-control" id="LeavesAllowedPerMonth" placeholder="LeavesAllowedPerMonth" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="PanNo">Pan No</label>
+                            <input type="text" class="form-control" id="PanNo" placeholder="PanNo" />
+                        </div>
+                        <div class="form-group">
+                            <label for="GSTIN">GSTIN</label>
+                            <input type="text" class="form-control" id="GSTIN" placeholder="GSTIN" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ValidFrom">Valid From</label>
+                            <input type="date" class="form-control" id="ValidFrom" placeholder="ValidFrom" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ValidTo">Valid To</label>
+                            <input type="date" class="form-control" id="ValidTo" placeholder="ValidTo" />
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAdd" onclick="btnAdd_Click();">Save</button>
+                <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" onclick="btnUpdate_Click();">Update</button>
+                <button type="button" id="btnCancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+ 
+
+
+@section Scripts{
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+
+    <link href="~/Scripts/MyScripts/StyleSheet.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            loadData();
+        });
+        $('#ClientId').change(function () {
+            updateProjectDropdown($(this).val());
+        });
+        function updateProjectDropdown(clientId, selectedProjectId = null) {
+            if (clientId) {
+                $.ajax({
+                    url: "/ClientBilling/GetProjectsByClientId/",
+                    type: 'GET',
+                    data: { clientId: clientId },
+                    success: function (data) {
+                        var projectDropdown = $('#ProjectId');
+                        projectDropdown.empty();
+                        projectDropdown.append($('<option/>', {
+                            value: 0,
+                            text: "-----Select-----"
+                        }));
+                        $.each(data, function (index, item) {
+                            projectDropdown.append($('<option/>', {
+                                value: item.ProjectId,
+                                text: item.ProjectName
+                            }));
+                        });
+                        if (selectedProjectId !== null) {
+                            projectDropdown.val(selectedProjectId);
+                        } else {
+                            projectDropdown.val(0); 
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.error("Error fetching projects:", textStatus, errorThrown);
+                    }
+                });
+            } else {
+                $('#ProjectId').empty();
+              
+            }
+        }
+        function loadData() {
+            var CBObj = {
+                srClientId: $('#srClientId').val()
+            };
+
+            $.ajax({
+                url: "/ClientBilling/List/",
+                data: JSON.stringify(CBObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $('#ClientBillingTable').DataTable({
+                        scrollX: true,
+                        pagingType: 'full',
+                        scrollY: '250px',
+                        data: data,
+                        "bDestroy": true,
+                        columns: [
+                            { data: "CBId" },
+                            { data: "ClientName" },
+                            { data: "ProjectName" },
+                            { data: "LocationName" },
+                            { data: "MaximumBillableDays" },
+                            { data: "BillingPeriodFrom" },
+                            { data: "BillingPeriodTo" },
+                            { data: "LeavesAllowedPerMonth" },
+                            { data: "PanNo" },
+                            { data: "GSTIN" },
+                            {
+                                data: "ValidFrom",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    return date1 == '01-01-0001' ? null : date1;
+                                }
+                            },
+                            {
+                                data: "ValidTo",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    return date1 == '01-01-0001' ? null : date1;
+                                }
+                            },
+                            { data: "UserName" },
+                            {
+                                data: "LastUpdatedDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    return date1 == '01-01-0001' ? null : date1;
+                                }
+                            },
+                            {
+                                data: null,
+                                render: function (data) {
+                                    var h1 = '<a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#myModal" onclick=Edit(' + data.CBId + ')/a>';
+                                    var h2 = '<a href="#" class="glyphicon glyphicon-trash" style="color: red; padding-left: 15px;" onclick=Delete(' + data.CBId + ')/a>';
+                                   
+                                    return h1 + h2;
+                                }
+                            }
+                        ],
+                        "initComplete": function (settings, json) {
+                            if (json.recordsTotal > 0) {
+                                $("#ClientBillingTable").DataTable().page(0).draw(false);
+                            }
+                            $('.paginate_button').on('click', function () {
+                                if ($(this).hasClass('disabled')) {
+                                    return false;
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        $('#btnAdd').click(function (e) {
+
+            allok = 0
+            msg = ' WARNING!!! \n'
+
+            var cname = $('#ClientId').val();
+            var ValidFrom = $('#ValidFrom').val();
+            var ValidTo = $('#ValidTo').val();
+
+            if (cname.length == 0) {
+                allok = allok + 1
+                msg = msg + '\nClientName Cannot be Empty.\n';
+            }
+            if ((ValidFrom == null || ValidFrom == '') && (ValidTo != null && ValidTo != '')) {
+                allok = allok + 1
+                msg = msg + ',' + '\n End Date : Cannot enter End Date, if Start Date is blank.\n';
+            }
+
+            if (ValidTo != null && ValidTo != '') {
+                if (ValidFrom != null && ValidFrom != '') {
+                    var datam = moment($('#ValidFrom').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#ValidTo').val());
+                    var dt2 = datam
+
+                    if ((dt2 < dt1) == true) {
+                        allok = allok + 1
+                        msg = msg + '\n Invalid Dates, Please Enter The Correct StartDate & EndDate.\n';
+
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+
+                Add()
+                $("#btnCancel").trigger("click");
+
+
+            }
+
+        });
+        function Add() {
+
+            var CBObj = {
+                ClientId: $('#ClientId').val(),
+                ProjectId: $('#ProjectId').val(),
+                LocationId: $('#LocationId').val(),
+                MaximumBillableDays: $('#MaximumBillableDays').val(),
+                BillingPeriodFrom: $('#BillingPeriodFrom').val(),
+                BillingPeriodTo: $('#BillingPeriodTo').val(),
+                LeavesAllowedPerMonth: $('#LeavesAllowedPerMonth').val(),
+                PanNo: $('#PanNo').val(),
+                GSTIN: $('#GSTIN').val(),
+                ValidFrom: $('#ValidFrom').val(),
+                ValidTo: $('#ValidTo').val(),
+                LastUpdatedBy: $('#LastUpdatedBy').val(),
+                LastUpdatedDate: $('#LastUpdatedDate').val(),
+
+
+            };
+
+            $.ajax({
+                url: "/ClientBilling/Add",
+                data: JSON.stringify(CBObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                    loadData();
+                    $('#myModal').modal('hide');
+                    $('#CBId').val();
+                    $('#ClientId').val();
+                    $('#ProjectId').val();
+                    $('#LocationId').val();
+                    $('#MaximumBillableDays').val();
+                    $('#BillingPeriodFrom').val();
+                    $('#BillingPeriodTo').val();
+                    $('#LeavesAllowedPerMonth').val();
+                    $('#PanNo').val();
+                    $('#GSTIN').val();
+                    $('#ValidFrom').val();
+                    $('#ValidTo').val();
+                    $('#LastUpdatedBy').val();
+                    $('#LastUpdatedDate').val();
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+        function Edit(CBID) {
+            $.ajax({
+                url: "/ClientBilling/GetbyID/" + CBID,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    $('#CBId').val(CBID);
+                    $('#ClientId').val(result.ClientId);
+                    $('#LocationId').val(result.LocationId);
+                    $('#MaximumBillableDays').val(result.MaximumBillableDays);
+                    $('#BillingPeriodFrom').val(result.BillingPeriodFrom);
+                    $('#BillingPeriodTo').val(result.BillingPeriodTo);
+                    $('#LeavesAllowedPerMonth').val(result.LeavesAllowedPerMonth);
+                    $('#PanNo').val(result.PanNo);
+                    $('#GSTIN').val(result.GSTIN);
+                    $('#LastUpdatedBy').val(result.LastUpdatedBy);
+                    $('#LastUpdatedDate').val(result.LastUpdatedDate);
+
+                    var datam = moment(result.ValidFrom);
+                    var ValidFrom = datam.format("YYYY-MM-DD");
+                    if (ValidFrom == '0001-01-01') {
+                        $('#ValidFrom').val(null);
+                    } else {
+                        $('#ValidFrom').val(ValidFrom);
+                    }
+
+                    var datam = moment(result.ValidTo);
+                    var ValidTo = datam.format("YYYY-MM-DD");
+                    if (ValidTo == '0001-01-01') {
+                        $('#ValidTo').val(null);
+                    } else {
+                        $('#ValidTo').val(ValidTo);
+                    }
+
+                    $('#btnUpdate').show();
+                    $('#btnAdd').hide();
+
+                    updateProjectDropdown(result.ClientId, result.ProjectId);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+        $('#btnUpdate').click(function (e) {
+
+            allok = 0
+            msg = ' WARNING!!! \n'
+            var cname = $('#ClientId').val();
+            var SD1 = $('#ValidFrom').val();
+            var ED1 = $('#ValidTo').val();
+
+            if (cname.length == 0) {
+                allok = allok + 1
+                msg = msg + '\nClientName Cannot be Empty.\n';
+            }
+
+            if ((SD1 == null || SD1 == '') && (ED1 != null && ED1 != '')) {
+                allok = allok + 1
+
+                msg = msg + ',' + '\n End Date : Cannot enter End Date, if Start Date is blank.\n';
+
+            }
+
+            if (ED1 != null && ED1 != '') {
+                if (SD1 != null && SD1 != '') {
+                    var datam = moment($('#ValidFrom').val());
+                    var dt2 = datam
+
+                    var datam = moment($('#ValidTo').val());
+                    var dt3 = datam
+
+                    if ((dt3 < dt2) == true) {
+                        allok = allok + 1
+                        msg = msg + '\n Invalid Dates, Please Enter The Correct StartDate & EndDate.\n';
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+
+                Update()
+                $("#btnCancel").trigger("click");
+
+            }
+
+        });
+        function Update() {
+
+            var CBObj = {
+                CBId: $('#CBId').val(),
+                ClientId: $('#ClientId').val(),
+                ProjectId: $('#ProjectId').val(),
+                LocationId: $('#LocationId').val(),
+                MaximumBillableDays: $('#MaximumBillableDays').val(),
+                BillingPeriodFrom: $('#BillingPeriodFrom').val(),
+                BillingPeriodTo: $('#BillingPeriodTo').val(),
+                LeavesAllowedPerMonth: $('#LeavesAllowedPerMonth').val(),
+                PanNo: $('#PanNo').val(),
+                GSTIN: $('#GSTIN').val(),
+                ValidFrom: $('#ValidFrom').val(),
+                ValidTo: $('#ValidTo').val(),
+                LastUpdatedBy: $('#LastUpdatedBy').val(),
+                LastUpdatedDate: $('#LastUpdatedDate').val(),
+
+
+            };
+
+            $.ajax(
+                {
+                    url: "/ClientBilling/Update",
+                    data: JSON.stringify(CBObj),
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+
+                        loadData()
+                        $('#CBId').val("");
+                        $('#ClientId').val("");
+                        $('#ProjectId').val("");
+                        $('#LocationId').val("");
+                        $('#MaximumBillableDays').val("");
+                        $('#BillingPeriodFrom').val("");
+                        $('#BillingPeriodTo').val("");
+                        $('#LeavesAllowedPerMonth').val("");
+                        $('#PanNo').val("");
+                        $('#GSTIN').val("");
+                        $('#ValidFrom').val("");
+                        $('#ValidTo').val("");
+                        $('#LastUpdatedBy').val("");
+                        $('#LastUpdatedDate').val("");
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+        }
+        function Delete(ID) {
+            var ans = confirm("Are you sure you want to delete this ID?");
+            if (ans) {
+                $.ajax({
+                    url: "/ClientBilling/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData()
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+        function clearTextBox() {
+            $('#CBId').val("");
+            $('#ClientId').val(0);
+            $('#ProjectId').val(0);
+            $('#LocationId').val(0);
+            $('#MaximumBillableDays').val("");
+            $('#BillingPeriodFrom').val("");
+            $('#BillingPeriodTo').val("");
+            $('#LeavesAllowedPerMonth').val("");
+            $('#PanNo').val("");
+            $('#GSTIN').val("");
+            $('#ValidFrom').val("");
+            $('#ValidTo').val("");
+
+
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+
+
+        }
+        
+    </script>
+}

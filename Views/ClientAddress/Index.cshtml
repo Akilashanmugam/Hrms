@@ -1,0 +1,580 @@
+﻿@model  HrmsWeb.Models.ClientAddressModel
+@{
+    ViewBag.Title = "Index";
+}
+
+
+    <h3>Client Address </h3>
+    <button type="button" style=" height:30px;width:180px;" class="btn btn-primary " data-toggle="modal" data-target="#myModal" onclick="ClearTextBox();">
+        Add Client Address
+    </button>
+
+<div style="width: fit-content; height: fit-content; margin-right: 10px; margin-top: 10px;">
+    <div class="table-container">
+        <table class="table table-bordered stripe row-border order-column" style="width:100%;" id="CATable">
+
+            <thead class="bg-primary" style="width:1200px;">
+                <tr>
+                    <th>Address Id</th>
+                    <th>Client Id</th>
+                    <th>AddressType Id</th>
+                    <th>Floor </th>
+                    <th>Building Name </th>
+                    <th>Road </th>
+                    <th>Area </th>
+                    <th>City Id </th>
+                    <th>State Id </th>
+                    <th>Pin Code</th>
+                    <th>Country Id</th>
+                    <th>Phone No</th>
+                    <th>Mobile No</th>
+                    <th>Fax</th>
+                    <th>Email Id</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>GSTIN</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody class="tbody" style="width:1px; white-space:nowrap; ">
+                <!-- Project records will be populated here -->
+            </tbody>
+        </table>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="history.back();">Back</button>
+</div>
+
+<div class="modal" data-backdrop="static" data-keyboard="false" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @*style="background-color:#DCDCDC;"*@
+            <div class="modal-header btn-primary">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="myModalLabel">Add Client Address</h4>
+            </div>
+            <div class="modal-body row">
+                <form>
+                    <div class="col-lg-4">
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="AddressId">AddressId</label>
+                            <input type="text" class="form-control" id="AddressId" placeholder="AddressId" disabled="disabled" />
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="ClientId" class="col-form-label" >Client</label>
+                            @Html.DropDownListFor(m => m.ClientId, new SelectList(ViewBag.client, "ClientId", "ClientName"), new { @class = "form-control" })
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="AddressTypeId" class="col-form-label" >AddressType</label>
+                            @Html.DropDownListFor(m => m.AddressTypeId, new SelectList(ViewBag.addresstype, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control"})
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="Floor">Floor</label>
+                            <input type="text" class="form-control" id="Floor" placeholder="Floor" />
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="BuildingName">BuildingName</label>
+                            <input type="text" class="form-control" id="BuildingName" placeholder="BuildingName" />
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="Road">Road</label>
+                            <input type="text" class="form-control" id="Road" placeholder="Road" />
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="Area">Area</label>
+                            <input type="text" class="form-control" id="Area" placeholder="Area" />
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="CityId" class="col-form-label">City</label>
+                            @Html.DropDownListFor(m => m.CityId, new SelectList(ViewBag.city, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control" })
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="StateId" class="col-form-label">State</label>
+                            @Html.DropDownListFor(m => m.StateId, new SelectList(ViewBag.state, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control"})
+                        </div>
+
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="PinCode">PinCode</label>
+                            <input type="text" class="form-control" id="PinCode" placeholder="PinCode" />
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="CountryId" class="col-form-label" >Country</label>
+                            @Html.DropDownListFor(m => m.CountryId, new SelectList(ViewBag.country, "LookUpDetailId", "LookUpDetailName"), new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="PhoneNo">PhoneNo</label>
+                            <input type="text" class="form-control" id="PhoneNo" placeholder="PhoneNo" />
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="MobileNo">MobileNo</label>
+                            <input type="text" class="form-control" id="MobileNo" placeholder="MobileNo" />
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="Fax">Fax</label>
+                            <input type="text" class="form-control" id="Fax" placeholder="Fax" />
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="EmailId">EmailId</label>
+                            <input type="text" class="form-control" id="EmailId" placeholder="EmailId" />
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="StartDate">StartDate</label>
+                            <input type="date" class="form-control" id="StartDate" placeholder="StartDate" />
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="EndDate">EndDate</label>
+                            <input type="date" class="form-control" id="EndDate" placeholder="EndDate" />
+                        </div>
+                        <div class="form-group" style="margin-top:10px;">
+                            <label for="GSTIN">GSTIN</label>
+                            <input type="text" class="form-control" id="GSTIN" placeholder="GSTIN" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAdd" onclick="btnAdd_Click;">Save</button>
+                <button type="button" class="btn btn-primary" id="btnUpdate" style="display:none;" data-dismiss="modal" onclick="btnUpdate_Click;">Update</button>
+                <button type="button" id="btnCancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-container {
+        width: 60%;
+        height: 300px;
+        overflow-x: auto;
+        overflow-y: auto;
+    }
+</style>
+
+@section Scripts{
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+
+    <link href="~/Scripts/MyScripts/StyleSheet.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            loadData();
+        });
+        function loadData() {
+
+            $.ajax({
+                url: "/ClientAddress/List/",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+
+                    $('#CATable').DataTable({
+
+                        "bDestroy": true,
+                        data: data,
+                        columns: [
+                            { data: "AddressId" },
+                            { data: "ClientName" },
+                            { data: "AddressTypeName" },
+                            { data: "Floor" },
+                            { data: "BuildingName" },
+                            { data: "Road" },
+                            { data: "Area" },
+                            { data: "CityName" },
+                            { data: "StateName" },
+                            { data: "PinCode" },
+                            { data: "CountryName" },
+                            { data: "PhoneNo" },
+                            { data: "MobileNo" },
+                            { data: "Fax" },
+                            { data: "EmailId" },
+
+                            {
+                                data: "StartDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            {
+                                data: "EndDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY")
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            { data: "GSTIN" },
+
+                            {
+                                data: null,
+                                render: function (data) {
+                                    {
+
+                                        var h1 = '<a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#myModal" onclick=Edit(' + data.AddressId + ')/a> '
+                                        var h2 = '<a href = "#" class="glyphicon glyphicon-trash" style = "color: red;padding-left:15px " onclick = Delete(' + data.AddressId + ')/a> '
+                                        /*var h3 = '<a href = "#" class="glyphicon glyphicon-new-window" style = "color: blue;padding-left:15px "data-toggle="modal" data-target="#CompanyContactModal" onclick="LoadDataSelect(' + data.ProjectId + ')"/a>'*/
+                                        var h4 = h1 + h2
+
+                                        return h4;
+
+
+                                    }
+
+                                }
+                            }
+                        ],
+                        "initComplete": function (settings, json) {
+                            // Validate first page
+                            if (json.recordsTotal > 0) {
+                                $("#CATable").DataTable().page(0).draw(false);
+                            }
+
+                            // Modify pagination buttons
+                            $('.paginate_button').on('click', function () {
+                                if ($(this).hasClass('disabled')) {
+                                    return false;
+                                }
+                            });
+                        }
+
+
+                    });
+
+
+                }
+            });
+        }
+        $('#btnAdd').click(function (e) {
+
+            allok = 0
+            msg = ' WARNING!!! \n'
+
+            /* var cname = $('#ProjectName').val();*/
+            var StartDate = $('#StartDate').val();
+            var EndDate = $('#EndDate').val();
+
+            //if (cname.length == 0) {
+            //    allok = allok + 1
+            //    msg = msg + '\nProjectName Cannot be Empty.\n';
+            //}
+
+
+            if ((StartDate == null || StartDate == '') && (EndDate != null && EndDate != '')) {
+                allok = allok + 1
+                msg = msg + ',' + '\n End Date : Cannot enter End Date, if Start Date is blank.\n';
+            }
+
+            if (EndDate != null && EndDate != '') {
+                if (StartDate != null && StartDate != '') {
+                    var datam = moment($('#StartDate').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#EndDate').val());
+                    var dt2 = datam
+
+                    if ((dt2 < dt1) == true) {
+                        allok = allok + 1
+                        msg = msg + '\n Invalid Dates, Please Enter The Correct StartDate & EndDate.\n';
+
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+
+                Add()
+                $("#btnCancel").trigger("click");
+
+
+            }
+
+        });
+        function Add() {
+
+            var CAObj = {
+
+                ClientId: $('#ClientId').val(),
+                AddressTypeId: $('#AddressTypeId').val(),
+                Floor: $('#Floor').val(),
+                BuildingName: $('#BuildingName').val(),
+                Road: $('#Road').val(),
+                Area: $('#Area').val(),
+                CityId: $('#CityId').val(),
+                StateId: $('#StateId').val(),
+                PinCode: $('#PinCode').val(),
+                CountryId: $('#CountryId').val(),
+                PhoneNo: $('#PhoneNo').val(),
+                MobileNo: $('#MobileNo').val(),
+                Fax: $('#Fax').val(),
+                EmailId: $('#EmailId').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+                GSTIN: $('#GSTIN').val(),
+
+
+            };
+
+            $.ajax({
+                url: "/ClientAddress/Add",
+                data: JSON.stringify(CAObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                    loadData();
+                    $('#myModal').modal('hide');
+                    $('#AddressId').val();
+                    $('#ClientId').val();
+                    $('#AddressTypeId').val();
+                    $('#Floor').val();
+                    $('#BuildingName').val();
+                    $('#Road').val();
+                    $('#Area').val();
+                    $('#CityId').val();
+                    $('#StateId').val();
+                    $('#PinCode').val();
+                    $('#CountryId').val();
+                    $('#PhoneNo').val();
+                    $('#MobileNo').val();
+                    $('#Fax').val();
+                    $('#EmailId').val();
+                    $('#StartDate').val();
+                    $('#EndDate').val();
+                    $('#GSTIN').val();
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+        function Edit(ComID) {
+
+            $.ajax({
+                url: "/ClientAddress/GetbyID/" + ComID,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+
+                    $('#AddressId').val(ComID);
+                    $('#ClientId').val(result.ClientId);
+                    $('#AddressTypeId').val(result.AddressTypeId);
+                    $('#Floor').val(result.Floor);
+                    $('#BuildingName').val(result.BuildingName);
+                    $('#Road').val(result.Road);
+                    $('#Area').val(result.Area);
+                    $('#CityId').val(result.CityId);
+                    $('#StateId').val(result.StateId);
+                    $('#PinCode').val(result.PinCode);
+                    $('#CountryId').val(result.CountryId);
+                    $('#PhoneNo').val(result.PhoneNo);
+                    $('#MobileNo').val(result.MobileNo);
+                    $('#Fax').val(result.Fax);
+                    $('#EmailId').val(result.EmailId);
+                    $('#StartDate').val(result.StartDate);
+                    $('#EndDate').val(result.EndDate);
+                    $('#GSTIN').val(result.GSTIN);
+
+                    var datam = moment(result.StartDate);
+                    var StartDate = datam.format("YYYY-MM-DD");
+                    if (StartDate == '0001-01-01') {
+                        $('#StartDate').val(null);
+                    } else {
+                        $('#StartDate').val(StartDate);
+                    }
+
+                    var datam = moment(result.EndDate);
+                    var EndDate = datam.format("YYYY-MM-DD");
+                    if (EndDate == '0001-01-01') {
+                        $('#EndDate').val(null);
+                    } else {
+                        $('#EndDate').val(EndDate);
+                    }
+
+                    $('#btnUpdate').show();
+                    $('#btnAdd').hide();
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+        $('#btnUpdate').click(function (e) {
+
+            allok = 0
+            msg = ' WARNING!!! \n'
+            /*var comname1 = $('#ProjectName').val();*/
+            var SD1 = $('#StartDate').val();
+            var ED1 = $('#EndDate').val();
+
+            //if (comname1.length == 0) {
+
+            //    allok = allok + 1
+
+            //    msg = msg + '\nProjectName Cannot be Empty.\n';
+            //}
+
+            if ((SD1 == null || SD1 == '') && (ED1 != null && ED1 != '')) {
+                allok = allok + 1
+
+                msg = msg + ',' + '\n End Date : Cannot enter End Date, if Start Date is blank.\n';
+
+            }
+
+            if (ED1 != null && ED1 != '') {
+                if (SD1 != null && SD1 != '') {
+                    var datam = moment($('#StartDate').val());
+                    var dt2 = datam
+
+                    var datam = moment($('#EndDate').val());
+                    var dt3 = datam
+
+                    if ((dt3 < dt2) == true) {
+                        allok = allok + 1
+                        msg = msg + '\n Invalid Dates, Please Enter The Correct StartDate & EndDate.\n';
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+
+                Update()
+                $("#btnCancel").trigger("click");
+
+            }
+
+        });
+        function Update() {
+
+            var ComObj = {
+                AddressId: $('#AddressId').val(),
+                ClientId: $('#ClientId').val(),
+                AddressTypeId: $('#AddressTypeId').val(),
+                Floor: $('#Floor').val(),
+                BuildingName: $('#BuildingName').val(),
+                Road: $('#Road').val(),
+                Area: $('#Area').val(),
+                CityId: $('#CityId').val(),
+                StateId: $('#StateId').val(),
+                PinCode: $('#PinCode').val(),
+                CountryId: $('#CountryId').val(),
+                PhoneNo: $('#PhoneNo').val(),
+                MobileNo: $('#MobileNo').val(),
+                Fax: $('#Fax').val(),
+                EmailId: $('#EmailId').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+                GSTIN: $('#GSTIN').val(),
+
+            };
+
+            $.ajax(
+                {
+                    url: "/ClientAddress/Update",
+                    data: JSON.stringify(ComObj),
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+
+                        loadData();
+                        $('#AddressId').val("");
+                        $('#ClientId').val("");
+                        $('#AddressTypeId').val("");
+                        $('#Floor').val("");
+                        $('#BuildingName').val("");
+                        $('#Road').val("");
+                        $('#Area').val("");
+                        $('#CityId').val("");
+                        $('#StateId').val("");
+                        $('#PinCode').val("");
+                        $('#CountryId').val("");
+                        $('#PhoneNo').val("");
+                        $('#MobileNo').val("");
+                        $('#Fax').val("");
+                        $('#EmailId').val("");
+                        $('#StartDate').val("");
+                        $('#EndDate').val("");
+                        $('#GSTIN').val("");
+
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+        }
+        function Delete(ID) {
+            var ans = confirm("Are you sure you want to delete this ID?");
+            if (ans) {
+                $.ajax({
+                    url: "/ClientAddress/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData();
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+        function clearTextBox() {
+            $('#AddressId').val("");
+            $('#ClientId').val("");
+            $('#AddressTypeId').val("");
+            $('#Floor').val("");
+            $('#BuildingName').val("");
+            $('#Road').val("");
+            $('#Area').val("");
+            $('#CityId').val("");
+            $('#StateId').val("");
+            $('#PinCode').val("");
+            $('#CountryId').val("");
+            $('#PhoneNo').val("");
+            $('#MobileNo').val("");
+            $('#Fax').val("");
+            $('#EmailId').val("");
+            $('#StartDate').val("");
+            $('#EndDate').val("");
+            $('#GSTIN').val("");
+
+
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+
+
+        }
+    </script>
+}

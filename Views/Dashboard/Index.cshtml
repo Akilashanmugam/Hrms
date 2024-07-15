@@ -1,0 +1,656 @@
+﻿@model HrmsWeb.Models.DashboardModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item" style="margin-top:-10px;">
+                <a class="nav-link" href="/UserProfile" title="Profile">
+                    <span class="icon-bg">
+                        <i class="bi bi-person"></i>
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/Dashboard" title="Dashboard">
+                    <span class="icon-bg">
+                        <i class="bi bi-speedometer2"></i>
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../Employee/Index" title="Employees">
+                    <span class="icon-bg">
+                        <i class="bi bi-person"></i>
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Approvals" title="Approvals">
+                    <span class="icon-bg">
+                        <i class="bi bi-check-circle"></i>
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Reports" title=" Reports">
+                    <span class="icon-bg">
+                        <i class="bi bi-bar-chart"></i>
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Loans" title=" Loans">
+                    <span class="icon-bg">
+                        <i class="bi bi-currency-dollar"></i>
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../Invoice/Index" title=" Invoices">
+                    <span class="icon-bg">
+                        <i class="bi bi-file-text"></i>
+                    </span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Requests" title="Requests">
+                    <span class="icon-bg">
+                        <i class="bi bi-list-task"></i>
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Deshboard -->
+
+<div class="main-content" id="main-content">
+    <!-- side bar button -->
+    <div class="sidebar-toggle" id="sidebarToggleBtn" style="margin-bottom:10px;">
+
+        <i class="bi bi-list"></i>
+    </div>
+    <h2 style="margin-top:-10px;">Dashboard</h2>
+
+    <div class="dashboard-container">
+        <div class="row">
+            <div class="card small-card" id="employees-card">
+                <div class="card-header">
+                    <span class="icon-circle" style="background-color: #007bff;">
+                        <i class="bi bi-person text-white"></i>
+                    </span>
+                    Employees Counting
+                </div>
+                <div class="card-body">
+                    Total Employees: <span id="employee-count"></span>
+                </div>
+            </div>
+            <div class="card small-card" id="salary-card">
+                <div class="card-header">
+                    <span class="icon-circle" style="background-color: #28a745;">
+                        <i class="bi bi-currency-rupee"></i>
+                    </span>
+                    Average Salary
+                </div>
+                <div class="card-body">
+                    Average Salary :5000
+                </div>
+            </div>
+            <div class="card small-card" id="outstanding-card">
+                <div class="card-header">
+                    <span class="icon-circle" style="background-color: #ffc107;">
+                        <i class="bi bi-calculator-fill text-white"></i>
+                    </span>
+                    Total outstanding
+                </div>
+                <div class="card-body">
+                    Total outstanding : 12
+                </div>
+            </div>
+            <div class="card small-card" id="requests-card">
+                <div class="card-header">
+                    <span class="icon-circle" style="background-color: #dc3545;">
+                        <i class="bi bi-messenger"></i>
+                    </span>
+                    Total Requests
+                </div>
+                <div class="card-body">
+                    Total Requests :10
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="height:350px;">
+            <div class="Clientcard">
+                <div class="Clientcard-header1">
+                    Client Map
+                </div>
+                <div class="Clientcard-body">
+                    <div class="scrollable">
+                        <div class="Clientchart-container">
+                            <canvas id="clientMapChart" width="400" height="150"></canvas> <!-- Ensure this width exceeds the container width -->
+                        </div>
+                    </div>
+                    <div class="Clientchart-footer">
+                        <!-- Footer content here -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <div class="Clientcard-header1">
+                    Employee Statistics
+                </div>
+                <div class="card-body scrollable" style="height:300px; display: flex; justify-content: center; align-items: center;">
+                    <canvas id="employeeChart" width="400" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Recent Employees</h4>
+                    <table class="table" id="DashboardEmployeeTable">
+                        <thead style="background-color:#166581;">
+                            <tr>
+                                <th>Employee Name</th>
+                                <th>Position</th>
+                                <th>GrossPay</th>
+                                <th>Total</th>
+                                <th>DOJ</th>
+                                <th>Client</th>
+
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+
+        @*<!-- side bar-- >*@
+        document.addEventListener('DOMContentLoaded', function () {
+            var sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+            var sidebar = document.getElementById('sidebar');
+            var mainContent = document.querySelector('.main-content');
+
+            sidebarToggleBtn.addEventListener('click', function () {
+                sidebar.classList.toggle('minimized');
+
+                if (sidebar.classList.contains('minimized')) {
+                    mainContent.classList.add('shifted');
+                } else {
+                    mainContent.classList.remove('shifted');
+                }
+            });
+        });
+
+
+
+        @*< !--nav link bar-- >*@
+        $(document).ready(function () {
+            $('.nav-link').on('click', function () {
+                $('.nav-link').removeClass('active');
+                $(this).addClass('active');
+            });
+        });
+
+
+        @*< !--Department wise Employees strength chart-- >*@
+        $(document).ready(function () {
+            loadData();
+
+            loadEmployeeData();
+        });
+
+        let employeeChart;
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function loadEmployeeData() {
+            $.ajax({
+                url: "/Dashboard/GetEmployeeData",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    const totalEmployees = data.reduce((total, department) => total + department.EmployeeCount, 0);
+
+                    const employeeData = {
+                        labels: data.map(department => department.DepartmentName),
+                        datasets: [{
+                            label: 'Number of Employees',
+                            data: data.map(department => department.EmployeeCount),
+                            backgroundColor: data.map(() => getRandomColor()),
+                        }]
+                    };
+
+                    document.getElementById('employee-count').innerText = totalEmployees;
+
+                    const ctx = document.getElementById('employeeChart').getContext('2d');
+                    if (employeeChart) {
+                        employeeChart.destroy();
+                    }
+                    employeeChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: employeeData,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (tooltipItem) {
+                                            return employeeData.labels[tooltipItem.dataIndex] + ': ' + employeeData.datasets[0].data[tooltipItem.dataIndex] + ' employees';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching employee data:', error);
+                }
+            });
+        }
+
+
+        @*< !--Client name vs Active Employees chart-- >*@
+        let clientMapChart;
+
+        function loadChartData() {
+            $.ajax({
+                url: "/Dashboard/GetClientDataCombine",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    const clientNames = data.map(client => client.ClientName);
+                    const employeeCounts = data.map(client => client.ActiveEmployeeCount);
+
+                    const clientMapData = {
+                        labels: clientNames,
+                        datasets: [{
+                            label: 'Number of Active Employees',
+                            data: employeeCounts,
+                            backgroundColor: clientNames.map(() => '#' + Math.floor(Math.random() * 16777215).toString(16))
+                        }]
+                    };
+
+                    if (clientMapChart) {
+                        clientMapChart.destroy();
+                    }
+
+                    const clientMapCtx = document.getElementById('clientMapChart').getContext('2d');
+                    clientMapChart = new Chart(clientMapCtx, {
+                        type: 'bar',
+                        data: clientMapData,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        stepSize: 10
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (tooltipItem) {
+                                            return clientMapData.labels[tooltipItem.dataIndex] + ': ' + clientMapData.datasets[0].data[tooltipItem.dataIndex] + ' employees';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.error('Error fetching client data:', error);
+                }
+            });
+        }
+
+        loadChartData();
+
+
+        @*< !-- Employees list process table -- >*@
+
+
+       function loadData() {
+    $.ajax({
+        url: "/Dashboard/List/",
+        type: "GET",
+        dataType: "json",
+        success: function (data) {
+
+            $('#DashboardEmployeeTable').DataTable({
+                destroy: true,
+                paging: false,
+                searching: false,
+                info: false,
+                lengthChange: false,
+                data: data,
+                columns: [
+                    {
+                        data: null,
+                        render: function (data) {
+                            var photoUrl = '/images/Picture005.png'; 
+                            var photo = '<img src="' + photoUrl + ' style="width: 30px; height: 30px; border-radius: 50%; margin-right: 10px;">';
+                            return photo + data.EmployeeName;
+                        }
+                    },
+                    { data: "DesignationName" },
+                    { data: "Gross" },
+                    { data: "NetPay" },
+                    {
+                        data: "ClientDOJ",
+                        render: function (data) {
+                            var date1 = moment(data).format("DD-MM-YYYY");
+                            return date1 === '01-01-0001' ? null : date1;
+                        }
+                    },
+                    { data: "ClientName" },
+                    {
+                        data: null,
+                        render: function (data) {
+                            var h1 = '<a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#myModal" onclick="Edit(' + data.EmployeeName + ')"></a>';
+                            var h2 = '<a href="#" class="glyphicon glyphicon-trash" style="color: red; padding-left: 15px;" onclick="Delete(' + data.EmployeeName + ')"></a>';
+                            return h1 + h2;
+                        }
+                    }
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    $(row).addClass('custom-row-style');
+                }
+            });
+        },
+    });
+}
+
+
+
+    </script>
+}
+
+
+<style>
+   /* Client Map*/
+    .Clientcard {
+        border-radius: 5px;
+        overflow: hidden;
+        margin: 20px;
+    }
+
+    .Clientcard-header1 {
+        background-color: #f5f5f5;
+        padding: 10px;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .Clientcard-body {
+        position: relative;
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .scrollable {
+        overflow-x: auto; /* Enable horizontal scroll */
+        white-space: nowrap; /* Prevent content from wrapping */
+        padding: 10px;
+        flex: 1; /* Allow the scrollable area to grow and take available space */
+    }
+
+    .Clientchart-container {
+        display: inline-block; /* Ensure content is inline to scroll horizontally */
+        width: 400px; /* Ensure this width exceeds the container width */
+    }
+
+
+    /*  table datalist colors*/
+    .custom-row-style {
+        background-color: #F0F8FF;
+        color: #000000;
+    }
+
+        .custom-row-style:nth-child(even) {
+            background-color: #E6E6FA;
+        }
+
+
+    body {
+        display: flex;
+    }
+
+    .sidebar-sticky {
+        background-color: #321C3A;
+    }
+    /*  sidebar*/
+    .sidebar {
+        width: 250px;
+        background-color: #333;
+        color: #fff;
+        position: fixed;
+        top: -10px;
+        left: 0;
+        height: 100%;
+        transition: transform 0.3s ease;
+        transform: translateX(0);
+    }
+
+        .sidebar.minimized {
+            transform: translateX(-250px);
+        }
+
+    .main-content {
+        margin-left: 5px;
+        transition: margin-left 0.3s ease;
+    }
+
+        .main-content.shifted {
+            margin-left: -120px;
+        }
+
+
+    /*  dashboard*/
+
+    .row {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .card {
+        flex: 1;
+        margin: 8px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .small-card .card-header {
+        display: flex;
+        align-items: center;
+        padding: 15px 10px;
+    }
+
+    .card-header1 {
+        padding: 5px;
+        font-weight: bold;
+        color: black;
+        text-align: center;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    #employees-card {
+        background-color: #AC6DBF;
+    }
+
+    #salary-card {
+        background-color: #2A7CA3;
+    }
+
+    #outstanding-card {
+        background-color: #58BBC2;
+    }
+
+    #requests-card {
+        background-color: #B0E0E6;
+    }
+
+    .chart-container {
+        width: 100%;
+        height: 400px;
+        position: relative;
+    }
+
+    .nav-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        position: relative;
+    }
+
+    .icon-bg {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 5px;
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .icon-bg i {
+            font-size: 1.5rem;
+        }
+
+    .icon-circle {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+
+        .icon-circle i {
+            font-size: 1.5rem;
+        }
+
+    .text-white {
+        color: white;
+    }
+
+    .nav-link:hover::after {
+        content: attr(title);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        white-space: nowrap;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        font-size: 0.875rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s, visibility 0.2s;
+    }
+
+    .nav-link:hover::after {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .nav-link[href="/UserProfile"] .icon-bg {
+        background-color: #313575;
+    }
+
+    .nav-link[href="/Dashboard"] .icon-bg {
+        background-color: #321951;
+    }
+
+    .nav-link[href="../Employee/Index"] .icon-bg {
+        background-color: #633090;
+    }
+
+    .nav-link[href="/Approvals"] .icon-bg {
+        background-color: #B22D37;
+    }
+
+    .nav-link[href="/Reports"] .icon-bg {
+        background-color: #B22E37;
+    }
+
+    .nav-link[href="/Loans"] .icon-bg {
+        background-color: #F68318;
+    }
+
+    .nav-link[href="../Invoice/Index"] .icon-bg {
+        background-color: #FDC005;
+    }
+
+    .nav-link[href="/Requests"] .icon-bg {
+        background-color: #0F2C33;
+    }
+</style>
+
+
+
+
+
+
+
+

@@ -1,0 +1,907 @@
+﻿@model HrmsWeb.Models.ClientModel
+
+@{ ViewBag.Title = "Index"; }
+
+
+<h2>Clients Record</h2>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="clearTextBox();">
+    Add New Client
+</button>
+<br />
+<br />
+<div style="width: fit-content; height:fit-content">
+    <table id="clientTable" class="table table-bordered table-hover">
+        <thead class="bg-primary">
+            <tr>
+                <th>ClientId</th>
+                <th>ClientName</th>
+                <th>ClientShortName</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody class="tbody">
+            <!-- Client records will be populated here -->
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-primary">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="myModalLabel">Add Client</h4>
+
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="Id">ClientId</label>
+                        <input type="text" class="form-control" id="ClientId" placeholder="Id" disabled="disabled" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Name">ClientName</label>
+                        <input type="text" class="form-control" id="ClientName" placeholder="Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ShortName">ClientShortName</label>
+                        <input type="text" class="form-control" id="ClientShortName" placeholder="ShortName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="StartDate">StartDate</label>
+                        <input type="date" class="form-control" id="StartDate" placeholder="StartDate" />
+                    </div>
+                    <div class="form-group">
+                        <label for="EndDate">EndDate</label>
+                        <input type="date" class="form-control" id="EndDate" placeholder="EndDate" />
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-primary" id="btnAdd" onclick="btnAdd_Click;">Save</button>
+                <button type="submit" class="btn btn-primary" form="myModal" id="btnUpdate" style="display:none;" OnClick="btnUpdate_Click">Update</button>
+
+                <button type="button" id="btnCancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+@*-----------------ClientContact-----------------*@
+
+
+<div class="modal fade" id="ContactModal" tabindex="-1" role="dialog" aria-labelledby="ContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:1250px;">
+        <div class="modal-content">
+            <div class="modal-header btn-primary">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="ContactModalLabel">Contact List</h4>
+
+            </div>
+            <div class="modal-body">
+                <div style="overflow: scroll; ">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ContactAddEditModal" onclick="ContactClearTextBox();">
+                        Add New Contact
+                    </button>
+                    <div><input type="text" id="txtClientId"></div>
+                    <br />
+                    <br />
+                    <table id="ContactTable" class="table table-bordered table-hover">
+                        <thead class="bg-primary">
+                            <tr>
+                                <th>ContactId</th>
+                                <th>ClientId</th>
+                                <th>ContactName</th>
+                                <th>MobileNo</th>
+                                <th>PhoneNo</th>
+                                <th>EmailId</th>
+                                <th>Department</th>
+                                <th>Designation</th>
+                                <th>StartDate</th>
+                                <th>EndDate</th>
+                                <th>LastUpdatedBy</th>
+                                <th>LastUpdatedDate</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody" id="ContactTableBody">
+                            @*Contact records will be populated here*@
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="ContactAddEditModal" tabindex="-1" role="dialog" aria-labelledby="ContactAddEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header btn-primary">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="ContactAddEditModalLabel">Client Contact Details</h4>
+
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="ContactId">Contact ID</label>
+                        <input type="text" class="form-control" id="ContactId" placeholder="Id" disabled="disabled" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ContactName">Contact Name</label>
+                        <input type="text" class="form-control" id="ContactName" placeholder="ContactName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="MobileNo">Mobile No</label>
+                        <input type="text" class="form-control" id="MobileNo" placeholder="Mobile No" />
+                    </div>
+                    <div class="form-group">
+                        <label for="PhoneNo">Phone No</label>
+                        <input type="text" class="form-control" id="PhoneNo" placeholder="Phone No" />
+                    </div>
+                    <div class="form-group">
+                        <label for="EmailId">Email ID</label>
+                        <input type="text" class="form-control" id="EmailId" placeholder="Email ID" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Department">Department</label>
+                        <input type="text" class="form-control" id="Department" placeholder="Department" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Designation">Designation</label>
+                        <input type="text" class="form-control" id="Designation" placeholder="Designation" />
+                    </div>
+                    <div class="form-group">
+                        <label for="StartDate">StartDate</label>
+                        <input type="date" class="form-control" id="ContactStartDate" />
+                    </div>
+                    <div class="form-group">
+                        <label for="EndDate">EndDate</label>
+                        <input type="date" class="form-control" id="ContactEndDate" />
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-primary" id="btnContactAdd" onclick="btnContactAdd_Click;">Save</button>
+                <button type="button" class="btn btn-primary" id="btnContactUpdate" style="display:none;" onclick="btnContactUpdate_Click;">Update</button>
+                <button type="button" id="btnContactCancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts{
+    <link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            loadData();
+        });
+
+        //Client Scripts
+        //Load data function
+        function loadData() {
+
+            $.ajax({
+                url: "/Client/List",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    $('#clientTable').DataTable({
+                        "bDestroy": true,
+                        data: data,
+                        columns: [
+                            { data: "ClientId" },
+                            { data: "ClientName" },
+                            { data: "ClientShortName" },
+                            {
+                                data: "StartDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY");
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+                            {
+                                data: "EndDate",
+                                render: function (data) {
+                                    var date1 = moment(data).format("DD-MM-YYYY")
+                                    if (date1 == '01-01-0001') {
+                                        return null;
+                                    } else {
+                                        return moment(data).format("DD-MM-YYYY");
+                                    }
+                                }
+                            },
+
+                            {
+                                data: null,
+                                render: function (data) {
+
+                                    var h1 = '<a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#myModal" onclick=getbyId(' + data.ClientId + ')/a>'
+                                    var h2 = '<a href = "#" class="glyphicon glyphicon-trash" style = "color: red;padding-left:15px " onclick=Delete(' + data.ClientId + ')/a>'
+                                    var h3 = '<a href = "#" class="glyphicon  glyphicon-new-window" style = "color: blue;padding-left:15px "data-toggle="modal" data-target="#ContactModal" onclick = ContactList(' + data.ClientId + ')/a>'
+                                    var h4 = h1 + h2 + h3
+                                    return h4
+
+                                }
+
+                            }
+                        ],
+                        "initComplete": function (settings, json) {
+                            // Validate first page
+                            if (json.recordsTotal > 0) {
+                                $("#clientTable").DataTable().page(0).draw(false);
+                            }
+
+                            // Modify pagination buttons
+                            $('.paginate_button').on('click', function () {
+                                if ($(this).hasClass('disabled')) {
+                                    return false;
+
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        //Add Data Function
+        function Add() {
+
+            var clientObj = {
+                ClientId: $('#ClientId').val(),
+                ClientName: $('#ClientName').val(),
+                ClientShortName: $('#ClientShortName').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val()
+
+            };
+
+            $.ajax({
+                url: "/Client/Add",
+                data: JSON.stringify(clientObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    loadData();
+                    $('#myModal').modal('hide');
+                    $('#ClientId').val("");
+                    $('#ClientName').val("");
+                    $('#ClientShortName').val("");
+                    $('#StartDate').val("");
+                    $('#EndDate').val("");
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+
+        //Function for getting the Data Based upon ClientId
+        function getbyId(ClientId) {
+            $('#ClientName').css('border-color', 'lightgrey');
+            $('#ClientShortName').css('border-color', 'lightgrey');
+            $('#StartDate').css('border-color', 'lightgrey');
+            $('#EndDate').css('border-color', 'lightgrey');
+            alert(ClientId)
+            $("")
+            $.ajax({
+                url: "/Client/getbyID/" + ClientId,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+
+                    $('#ClientId').val(result.ClientId);
+                    $('#ClientName').val(result.ClientName);
+                    $('#ClientShortName').val(result.ClientShortName);
+
+                    var datam = moment(result.StartDate);
+                    var StartDate = datam.format("YYYY-MM-DD");
+                    if (StartDate == '0001-01-01') {
+                        $('#StartDate').val(null);
+                    } else {
+                        $('#StartDate').val(StartDate);
+                    }
+
+                    var datam = moment(result.EndDate);
+                    var EndDate = datam.format("YYYY-MM-DD");
+                    if (EndDate == '0001-01-01') {
+                        $('#EndDate').val(null);
+                    } else {
+                        $('#EndDate').val(EndDate);
+                    }
+
+                    $('#btnUpdate').show();
+                    $('#btnAdd').hide();
+
+                },
+
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+
+        $('#btnAdd').click(function (e) {
+
+            allok = 0
+            msg = ''
+
+            var clientname = $('#ClientName').val();
+            var startdate = $('#StartDate').val();
+            var enddate = $('#EndDate').val();
+
+            if (clientname.length == 0) {
+                allok = allok + 1
+                msg = 'Client Name : Cannot be empty.'
+            }
+
+            if ((startdate == null || startdate == '') && (enddate != null && enddate != '')) {
+                allok = allok + 1
+                alert('Cannot enter End Date, if Start Date is blank.');
+                msg = msg + ',' + 'End Date : Cannot enter End Date, if Start Date is blank.'
+            }
+
+            if (enddate != null && enddate != '') {
+                if (startdate != null && startdate != '') {
+                    var datam = moment($('#StartDate').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#EndDate').val());
+                    var dt2 = datam
+
+                    if ((enddate < startdate) == true) {
+                        allok = allok + 1
+                        msg = msg + ',' + 'Start/End Dates Invalid';
+
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+                //Update date into Database
+                Add()
+                $("#btnCancel").trigger("click");
+
+
+            }
+
+
+        });
+
+
+        $('#btnUpdate').click(function (e) {
+
+            allok = 0
+            msg = ''
+
+            var clientname = $('#ClientName').val();
+            var startdate = $('#StartDate').val();
+            var enddate = $('#EndDate').val();
+
+            if (clientname.length == 0) {
+                allok = allok + 1
+                msg = 'Client Name : Cannot be empty.'
+            }
+
+            if ((startdate == null || startdate == '') && (enddate != null && enddate != '')) {
+                allok = allok + 1
+                alert('Cannot enter End Date, if  Start Date is blank.');
+                msg = msg + ',' + 'End Date : Cannot enter End Date, if Start Date is blank.'
+            }
+
+            if (enddate != null && enddate != '') {
+                if (startdate != null && startdate != '') {
+                    var datam = moment($('#StartDate').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#EndDate').val());
+                    var dt2 = datam
+
+                    if ((enddate < startdate) == true) {
+                        allok = allok + 1
+                        msg = msg + ',' + 'Start/End Dates Invalid';
+
+
+                    }
+
+                }
+            }
+
+
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+                //Update date into Database
+                alert('Update OK')
+                Update()
+                $("#btnCancel").trigger("click");
+
+
+            }
+
+
+        });
+
+        //// Function for updating client's record
+        function Update() {
+
+            var clientObj = {
+                ClientId: $('#ClientId').val(),
+                ClientName: $('#ClientName').val(),
+                ClientShortName: $('#ClientShortName').val(),
+                StartDate: $('#StartDate').val(),
+                EndDate: $('#EndDate').val(),
+
+            };
+            $.ajax({
+                url: "/Client/Update",
+                data: JSON.stringify(),
+                type: "POST",
+                contentType: "application/json;clientObjcharset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    loadData();
+                    /* $('#myModal').modal('hide');*/
+                    $('#ClientId').val("");
+                    $('#ClientName').val("");
+                    $('#ClientShortName').val("");
+                    $('#StartDate').val("");
+                    $('#EndDate').val("");
+
+                }
+            });
+        }
+        // Function for deleting client's record
+        function Delete(ClientId) {
+
+            var ans = confirm("Are you sure you want to delete this Record?");
+            if (ans) {
+                $.ajax({
+                    url: "/Client/Delete/" + ClientId,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData();
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+
+        //// Function for clearing the textboxes
+        function clearTextBox() {
+            $('#ClientId').val("");
+            $('#ClientName').val("");
+            $('#ClientShortName').val("");
+            $('#StartDate').val("");
+            $('#EndDate').val("");
+
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+            $('#ClientName').css('border-color', 'lightgrey');
+            $('#ClientShortName').css('border-color', 'lightgrey');
+            $('#StartDate').css('border-color', 'lightgrey');
+            $('#EndDate').css('border-color', 'lightgrey');
+
+        }
+        ///*******************************ClientContact Scripts******************************************/
+        //LoadContactData to Contact Modal Form
+
+
+        function ContactList(id) {
+
+
+            $('#txtClientId').val(id);
+
+            $('#ContactTableBody').empty();
+            $.ajax({
+                url: "/Client/ContactList/" + id,
+                type: "GET",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result, function (key, item) {
+                        var datam = moment(item.StartDate);
+                        var StartDate = datam.format("DD-MM-YYYY");
+                        if (StartDate == '01-01-0001') {
+                            $('#StartDate').val(null);
+                        } else {
+                            $('#StartDate').val(StartDate);
+                        }
+                     
+                        var datam = moment(item.EndDate);
+                        var EndDate = datam.format("DD-MM-YYYY");
+                        if (EndDate == '01-01-0001') {
+                            $('#EndDate').val(null);
+                        } else {
+                            $('#EndDate').val(EndDate);
+                        }
+                        var datam = moment(item.LastUpdatedDate);
+                        var LastUpdatedDate = datam.format("DD-MM-YYYY");
+                        if (LastUpdatedDate == '00-01-0001') {
+                            $('#LastUpdatedDate').val(null);
+                        } else {
+                            $('#LastUpdatedDate').val(LastUpdatedDate);
+                        }
+
+                        var LastUpdatedBy = item.LastUpdatedDate;
+
+                        html += '<tr>';
+                        html += '<td>' + item.ContactId + '</td>';
+                        html += '<td>' + item.ClientId + '</td>';
+                        html += '<td>' + item.ContactName + '</td>';
+                        html += '<td>' + item.MobileNo + '</td>';
+                        html += '<td>' + item.PhoneNo + '</td>';
+                        html += '<td>' + item.EmailId + '</td>';
+                        html += '<td>' + item.Department + '</td>';
+                        html += '<td>' + item.Designation + '</td>';
+                        html += '<td>' + StartDate + '</td>';
+                        html += '<td>' + EndDate + '</td>';
+                        html += '<td>' + LastUpdatedBy + '</td>';
+                        html += '<td>' + LastUpdatedDate + '</td>';
+                        html += '<td><a href="#" class="glyphicon glyphicon-pencil" data-toggle="modal" data-target="#ContactAddEditModal" onclick="ContactGetById(' + item.ContactId + ')"></a><a href="#" class="glyphicon glyphicon-trash" style = "color: red;padding-left:15px " onclick="ContactDelete(' + item.ContactId + ')"></a></td>;'
+
+                                          
+                        $('#ContactTableBody').html(html);
+
+                    });
+                }
+            });
+
+
+        }
+
+      /*  data - toggle="modal" data - target="#ContactAddEditModal"*/
+
+        $('#btnContactAdd').click(function (e) {
+
+            allok = 0
+            msg = ''
+            
+            var ContactName = $('#ContactName').val();
+            var stdt = $('#ContactStartDate').val();
+            var endt = $('#ContactEndDate').val();
+          
+            if (ContactName.length == 0) {
+                allok = allok + 1
+                msg = 'Contact Name : Cannot be empty.'
+            }
+
+            if ((stdt == null || stdt == '') && (endt != null && endt != '')) {
+                allok = allok + 1
+                alert('Cannot enter End Date, if Start Date is blank.');
+                msg = msg + ',' + 'End Date : Cannot enter End Date, if Start Date is blank.'
+            }
+
+            if (endt != null && endt != '') {
+                if (stdt != null && stdt != '') {
+                    var datam = moment($('#ContactStartDate').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#ContactEndDate').val());
+                    var dt2 = datam
+
+                    if ((dt2 < dt1) == true) {
+                        allok = allok + 1
+                        msg = msg + ',' + 'Start/End Dates Invalid';
+
+                    }
+
+                }
+            }
+           
+            if (allok > 0) {
+                alert(msg)
+                e.preventDefault();
+            }
+            if (allok == 0) {
+                /*Add date into Database*/
+             
+                ContactAdd()
+                $("#btnContactCancel").trigger("click");
+
+
+            }
+
+
+        });
+
+        /* Add Contact Data Function*/
+        function ContactAdd() {
+            id = $('#txtClientId').val()
+            var ContactObj = {
+                /*  ContactId: $('#ContactId').val(),*/
+                ClientId: $('#txtClientId').val(),
+                ContactName: $('#ContactName').val(),
+                MobileNo: $('#MobileNo').val(),
+                PhoneNo: $('#PhoneNo').val(),
+                EmailId: $('#EmailId').val(),
+                Department: $('#Department').val(),
+                Designation: $('#Designation').val(),
+                StartDate: $('#ContactStartDate').val(),
+                EndDate: $('#ContactEndDate').val()
+
+            };
+            alert('ContactAdd')
+            $.ajax({
+                url: "/Client/ContactAdd",
+                data: JSON.stringify(ContactObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    ContactList(id);
+                    $('#ClientContact').modal('hide');
+                    $('#ContactId').val("");
+                    $('#ClientId').val("");
+                    $('#ContactName').val("");
+                    $('#MobileNo').val("");
+                    $('#PhoneNo').val("");
+                    $('#EmailId').val("");
+                    $('#Department').val("");
+                    $('#Designation').val("");
+                    $('#StartDate').val("");
+                    $('#EndDate').val("");
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        }
+        $('#btnContactUpdate').click(function (e) {
+
+            allok = 0
+            msg = ''
+           
+            var ContactName = $('#ContactName').val();
+            var stdt = $('#ContactStartDate').val();
+            var endt = $('#ContactEndDate').val();
+
+            if (ContactName.length == 0) {
+                allok = allok + 1
+                msg = 'Contact Name : Cannot be empty.'
+            }
+
+            if ((stdt == null || stdt == '') && (endt != null && endt != '')) {
+                allok = allok + 1
+                alert('Cannot enter End Date, if Start Date is blank.');
+                msg = msg + ',' + 'End Date : Cannot enter End Date, if Start Date is blank.'
+            }
+
+            if (endt != null && endt != '') {
+                if (stdt != null && stdt != '') {
+                    var datam = moment($('#ContactStartDate').val());
+                    var dt1 = datam
+
+                    var datam = moment($('#ContactEndDate').val());
+                    var dt2 = datam
+
+                    if ((dt2 < dt1) == true) {
+                        allok = allok + 1
+                        msg = msg + ',' + 'Start/End Dates Invalid';
+
+                    }
+
+                }
+            }
+
+            if (allok > 0) {
+               /* alert(msg)*/
+                e.preventDefault();
+            }
+            if (allok == 0) {
+                /*Add date into Database*/
+
+                ContactUpdate(id)
+                $("#btnContactCancel").trigger("click");
+
+
+            }
+
+
+
+        });
+
+          function ContactUpdate(id) {
+
+            var contactObj = {
+                ContactId: id,
+                ClientId: $('#ClientId').val(),
+                ContactName: $('#ContactName').val(),
+                MobileNo: $('#MobileNo').val(),
+                PhoneNo: $('#PhoneNo').val(),
+                EmailId: $('#EmailId').val(),
+                Department: $('#Department').val(),
+                Designation: $('#Designation').val(),
+                StartDate: $('#ContactStartDate').val(),
+                EndDate: $('#ContactEndDate').val(),
+
+            };
+            $.ajax({
+                url: "/Client/ContactUpdate",
+                data: JSON.stringify(contactObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    ContactList(id);
+                    $('#myModal').modal('hide');
+                    $('#ContactId').val("");
+                    $('#ClientId').val("");
+                    $('#ContactName').val("");
+                    $('#MobileNo').val("");
+                    $('#PhoneNo').val("");
+                    $('#EmailId').val("");
+                    $('#Department').val("");
+                    $('#Designation').val("");
+                    $('#ContactStartDate').val("");
+                    $('#ContactEndDate').val("");
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+       
+        //Function for getting the Client Contact Data Based upon ClientId
+        function ContactGetById(id) {
+            msg = 'ContactGetById-' + id
+            $('#ContactId').css('border-color', 'lightgrey');
+            $('#ContactName').css('border-color', 'lightgrey');
+            $('#MobileNo').css('border-color', 'lightgrey');
+            $('#PhoneNo').css('border-color', 'lightgrey');
+            $('#EmailId').css('border-color', 'lightgrey');
+            $('#Department').css('border-color', 'lightgrey');
+            $('#Designation').css('border-color', 'lightgrey');
+            $('#ContactStartDate').css('border-color', 'lightgrey');
+            $('#ContactEndDate').css('border-color', 'lightgrey');
+            var valdata = $("#ContactAddEditModal").serialize();
+           
+            alert(valdata);
+            $.ajax({
+                url: "/Client/ContactGetById/" + id,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                  
+                    $('#ContactId').val(result.ContactId);
+                    $('#ClientId').val(result.ClientId);
+                    $('#ContactName').val(result.ContactName);
+                    $('#MobileNo').val(result.MobileNo);
+                    $('#PhoneNo').val(result.PhoneNo);
+                    $('#EmailId').val(result.EmailId);
+                    $('#Department').val(result.Department);
+                    $('#Designation').val(result.Designation);
+                    $('#ContactStartDate').val(result.StarDate);
+                    var datam = moment(result.StartDate);
+                    var ContactStartDate = datam.format("YYYY-MM-DD");
+                    if (ContactStartDate == '0001-01-01') {
+                        $('#ContactStartDate').val(null);
+                    } else {
+                        $('#ContactStartDate').val(ContactStartDate);
+                    }
+                    var datam = moment(result.EndDate);
+                    var ContactEndDate = datam.format("YYYY-MM-DD");
+                    if (EndDate == '0001-01-01') {
+                        $('#ContactEndDate').val(null);
+                    } else {
+                        $('#ContactEndDate').val(ContactEndDate);
+                    }
+                    
+
+                  alert(msg)
+                    $('#btnContactUpdate').show();
+                    $('#btnContactAdd').hide();
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+        };
+
+
+      // Function for deleting client's record
+        function ContactDelete(ContactId) {
+
+            var ans = confirm("Are you sure you want to delete this Record?");
+            if (ans) {
+                $.ajax({
+                    url: "/Client/ContactDelete/" + ContactId,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loadData();
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+        // Function for clearing the textboxes -->ClientContactTable
+        function ContactClearTextBox() {
+
+            $('#ContactId').val("");
+            $('#ClientId').val("");
+            $('#ContactName').val("");
+            $('#MobileNo').val("");
+            $('#PhoneNo').val("");
+            $('#EmailId').val("");
+            $('#Department').val("");
+            $('#Designation').val("");
+            $('#StartDate').val("");
+            $('#EndDate').val("");
+
+            $('#btnContactUpdate').hide();
+            $('#btnContactAdd').show();
+
+            $('#ContactId').css('border-color', 'lightgrey');
+            $('#ClientId').css('border-color', 'lightgrey');
+            $('#ContactName').css('border-color', 'lightgrey');
+            $('#MobileNo').css('border-color', 'lightgrey');
+            $('#PhoneNo').css('border-color', 'lightgrey');
+            $('#EmailId').css('border-color', 'lightgrey');
+            $('#Department').css('border-color', 'lightgrey');
+            $('#Designation').css('border-color', 'lightgrey');
+            $('#StartDate').css('border-color', 'lightgrey');
+            $('#EndDate').css('border-color', 'lightgrey');
+
+
+        }
+
+
+
+    </script>
+}
+
